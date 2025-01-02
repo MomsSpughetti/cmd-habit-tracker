@@ -1,0 +1,7 @@
+habit_tracker.db
+other
+__pychache__
+c_logging/__pychache__
+db/__pychache__
+exceptions/__pychache__
+history.log
