@@ -4,12 +4,13 @@ from db.tools import get_new_habit, Commands, set_test_mode
 import db.tools as tools
 import exceptions.exceptions as exceptions
 from pandas import DataFrame
+from ai.ai_methods import generate_habit
 
 
 def quick_test():
     # add()
     # print(db.get_habit_by_title('mama'))
-
+    generate_habit("I am suffering from bad sleeping, can you suggest me a habit to track so I can recover.")
     pass
 
 ################################ Main wrappers ################################
@@ -97,6 +98,27 @@ def progress(month: int, year: int):
 
 def habits():
     [print(habit) for habit in db.get_all_habits()]
+
+
+def generate():
+    generate_new = 1
+    while generate_new:
+        goal = tools.get_goal()
+        suggested_habit = generate_habit(goal)
+        print(suggested_habit)
+        print()
+        print("Do you want to add this habit?")
+        answer = input()
+        if answer.strip().lower() in ['yes', 'y']:
+            db.add_habit(tools.get_habit_from_str(suggested_habit).get_dict_column_value())
+            print("Habit was added. Run 'habits' to see it")
+            generate_new = 0
+        else:
+            print("Habit was not added, do you want to suggest a new habit?")
+            answer = input()
+            if answer.strip().lower() in ['yes', 'y']:
+                generate_new = 1
+
 
 ################################ Command handlers ################################
 

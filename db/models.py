@@ -1,6 +1,7 @@
 
 from db.tools import get_habit_dictionary, Habits, FREQUENCY_DICT, get_habit_dictionary_str_keys
 from exceptions.exceptions import CorruptedHabit
+from tools import Habits, defaultdict
 
 class Habit:
     def __init__(self):
@@ -42,6 +43,22 @@ class Habit:
             target_metric=self.target_metric,
             target_amount=self.target_amount
         )
+    
+    def set_values_from_dict(self, habit_dict: defaultdict):
+        """
+        Parameters:
+            A defaultdict(lambda: None) that have Enum:value pairs for habit table
+        """
+        self.id=habit_dict[Habits.ID]
+        self.title = habit_dict[Habits.TITLE]
+        self.start_date = habit_dict[Habits.START_DATE]
+        self.period = habit_dict[Habits.PERIOD]
+        self.note = habit_dict[Habits.NOTE]
+        self.frequency_format = habit_dict[Habits.FREQUENCY_FORMAT]
+        self.frequency_amount = habit_dict[Habits.FREQUENCY_AMOUNT]
+        self.target_metric = habit_dict[Habits.TARGET_METRIC]
+        self.target_amount = habit_dict[Habits.TARGET_AMOUNT]
+
     def set_habit_values(self, habit):
         """
         Parameters:

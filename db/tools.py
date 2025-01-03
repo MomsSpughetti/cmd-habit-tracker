@@ -1,8 +1,8 @@
 from enum import Enum
 import math
-
-
-
+from db.models import Habit
+from collections import defaultdict
+from exceptions.exceptions import CorruptedInput
 ########################################## Data ##########################################
 
 TEST_MODE = 0
@@ -12,11 +12,13 @@ class Errors(Enum):
     DUPLICATE_HABIT = 0
     CORRUPTED_HABIT = 1
     HABIT_NOT_FOUND = 2
+    CORRUPTED_INPUT = 3
 
 ERROR_MESSAGES = {
     Errors.DUPLICATE_HABIT: "Habit was not added because it already exists",
     Errors.CORRUPTED_HABIT: "Habit info is corrupted",
-    Errors.HABIT_NOT_FOUND: "Habit not found"
+    Errors.HABIT_NOT_FOUND: "Habit not found",
+    Errors.CORRUPTED_INPUT: "An input was corrupted. The input was"
 }
 
 
@@ -31,6 +33,24 @@ class Frequency(Enum):
 
     def get_single_freq_amount():
         return [Frequency.EVERY_DAY.value, Frequency.EVERY_MONTH.value, Frequency.EVERY_WEEK.value]
+    
+    def get_freq_enum(freq: str):
+        """Parameters: string containing one of day|week|month|days|weeks|months """
+        freq_cleared = freq.strip().lower()
+        if freq_cleared == 'day':
+            return Frequency.EVERY_DAY
+        elif freq_cleared == 'week':
+            return Frequency.EVERY_WEEK
+        elif freq_cleared == 'month':
+            return Frequency.EVERY_MONTH
+        elif freq_cleared == 'days':
+            return Frequency.EVERY_Z_DAYS
+        elif freq_cleared == 'weeks':
+            return Frequency.EVERY_Z_WEEKS
+        elif freq_cleared == 'moths':
+            return Frequency.EVERY_Z_MONTHS
+
+
 
 
 
@@ -112,6 +132,9 @@ class Tables(Enum):
     def __str__(self):
         return self.value
 
+DOCUMENTAION = """
+
+"""
 
 ########################################## Functions ##########################################
 
@@ -121,7 +144,7 @@ def set_test_mode():
     global DATABASE
     DATABASE = "habit_tracker_test.db"
 
-def get_habit_dictionary(title: str, period: int, note: str, freq_format: int, freq_amout, target_metric: str, target_amount: int, id=None, start_date=None):
+def get_habit_dictionary(title: str, period: int, note: str, freq_format: int, freq_amout, target_metric: str, target_amount: int, id=None, start_date=None) -> dict:
     """Returns a dictionary where the keys are Enums"""
     return {
         Habits.ID: id,
@@ -246,3 +269,76 @@ def get_new_habit():
                                 target_amount=target_amount)
 
 
+def get_frequency_from_str(freq: str):
+    """frequency: every X [days|weeks|months|day|week|moth]"""
+    frequency_parts = freq.split()
+    if len(frequency_parts) == 2:
+        return (1, frequency_parts[1])
+    if len(frequency_parts) != 3 or not frequency_parts[1].isdigit():
+        raise CorruptedInput(freq)
+    return (int(frequency_parts[1]), Frequency.get_freq_enum(frequency_parts[2]))
+    
+def get_target_from_str(target: str):
+    """
+    format of target: amount metric
+    Return value: 
+        (target_amount, target_metric)
+    """
+    target_parts = target.strip().split()
+    if len(target_parts) != 2 or not is_float(target_parts[0]):
+        return CorruptedInput(target)
+    return (float(target_parts[0]), target_parts[1])
+
+def get_period_from_str(period: str):
+    """
+    Parameters: a string of the format X days
+    Return value: an int representing the amount of days
+    """
+    period_parts = period.strip().split()
+    if len(period_parts) != 2:
+        return CorruptedInput(period)
+    if not period_parts[0].isdigit():
+        return CorruptedInput
+    return int(period_parts[0])
+
+
+def get_habit_from_str(habit: str) -> Habit:
+    """
+    Parameters:
+        habit - A string containing a habit in the following format:
+
+            habit: ""
+            frequency: every X [days|weeks|months|day|week|moth]
+            period: Y days
+            target per time: <amount> <metric>
+            note: ""
+    """
+    habit_list = [line.split(':')[-1].strip() for line in habit.strip().split("\n")]
+    habit_obj = Habit()
+    frequency_format, frequency_amount = get_frequency_from_str(habit_list[1])
+    target_amount, target_metric = get_target_from_str(habit_list[3])
+    habit_dict = defaultdict(lambda: None)
+    habit_to_partial_dict = get_habit_dictionary(
+        title=habit_list[0],
+        freq_amout=frequency_amount,
+        freq_format=frequency_format,
+        target_amount=target_amount,
+        target_metric=target_metric,
+        note=habit_list[-1],
+        period=habit_list[2]
+    )
+
+    for key,value in habit_to_partial_dict.items():
+        habit_dict[key] = value 
+
+    habit_obj.set_values_from_dict(
+        habit_dict
+    )
+
+    return habit_obj
+
+
+def get_goal():
+    print("Please describe your goal (e.g, sleeping well)")
+    goal = input().strip()
+    return goal
