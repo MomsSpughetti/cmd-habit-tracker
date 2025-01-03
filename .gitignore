@@ -2,3 +2,5 @@ habit_tracker.db
 other/
 __pycache__/
 history.log
+remember.md
+habit_tracker_test.db

@@ -1,8 +1,18 @@
 import db.db_operations as db
 import c_logging.logger as log
-from db.tools import get_new_habit, Commands
+from db.tools import get_new_habit, Commands, set_test_mode
+import db.tools as tools
 import exceptions.exceptions as exceptions
 from pandas import DataFrame
+
+
+def quick_test():
+    # add()
+    # print(db.get_habit_by_title('mama'))
+
+    pass
+
+################################ Main wrappers ################################
 
 def welcome():
     print("Welcome to your personal habit tracker")
@@ -28,13 +38,22 @@ def clear_storage():
 
 def initialize():
     try:
-        #clear_storage()
         initialize_logger()
         initialize_db()
     except Exception as e:
         print(e)
         close_app()
 
+def initialize_for_testing():
+    try:
+        set_test_mode()
+        initialize_db()
+        clear_storage()
+        initialize_logger()
+        initialize_db()
+    except Exception as e:
+        print(e)
+        close_app()
 
 ################################ Commands wrappers ################################
 def add():
@@ -76,6 +95,9 @@ def progress(month: int, year: int):
     """Prints the progress of all habits for the specified month"""
     pass
 
+def habits():
+    [print(habit) for habit in db.get_all_habits()]
+
 ################################ Command handlers ################################
 
 def get_command() -> str:
@@ -108,7 +130,7 @@ def execute_command(command: str):
     elif command == Commands.DELETE.value:
         pass
     elif command == Commands.HABITS.value:
-        pass
+        habits()
     elif command == Commands.HELP.value:
         help()
     elif command == Commands.PROGRESS.value:

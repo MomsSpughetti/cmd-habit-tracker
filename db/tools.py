@@ -1,13 +1,22 @@
 from enum import Enum
 import math
 
+
+
+########################################## Data ##########################################
+
+TEST_MODE = 0
 DATABASE = "habit_tracker.db"
 
 class Errors(Enum):
     DUPLICATE_HABIT = 0
+    CORRUPTED_HABIT = 1
+    HABIT_NOT_FOUND = 2
 
 ERROR_MESSAGES = {
-    Errors.DUPLICATE_HABIT: "Habit was not added because it already exists"
+    Errors.DUPLICATE_HABIT: "Habit was not added because it already exists",
+    Errors.CORRUPTED_HABIT: "Habit info is corrupted",
+    Errors.HABIT_NOT_FOUND: "Habit not found"
 }
 
 
@@ -80,6 +89,8 @@ class Habits(Enum):
 
     def __str__(self):
         return self.value
+    def get_number_of_columns():
+        return 9
 
 
 class Tracker(Enum):
@@ -102,15 +113,39 @@ class Tables(Enum):
         return self.value
 
 
-def get_habit_dictionary(title: str, period: int, note: str, freq_format: int, freq_amout, target_metric: str, target_amount: int):
+########################################## Functions ##########################################
 
+def set_test_mode():
+    global TEST_MODE
+    TEST_MODE = 1
+    global DATABASE
+    DATABASE = "habit_tracker_test.db"
+
+def get_habit_dictionary(title: str, period: int, note: str, freq_format: int, freq_amout, target_metric: str, target_amount: int, id=None, start_date=None):
+    """Returns a dictionary where the keys are Enums"""
     return {
-        Habits.TITLE.value: title.strip(),
+        Habits.ID: id,
+        Habits.TITLE: title,
+        Habits.START_DATE: start_date,
+        Habits.PERIOD: period,
+        Habits.NOTE: note,
+        Habits.FREQUENCY_FORMAT: freq_format,
+        Habits.FREQUENCY_AMOUNT: freq_amout,
+        Habits.TARGET_METRIC: target_metric,
+        Habits.TARGET_AMOUNT: target_amount
+    }
+
+def get_habit_dictionary_str_keys(title: str, period: int, note: str, freq_format: int, freq_amout, target_metric: str, target_amount: int, id=None, start_date=None):
+    """Returns a dictionary where the keys are string - names of columns"""
+    return {
+        Habits.ID.value: id,
+        Habits.TITLE.value: title,
+        Habits.START_DATE.value: start_date,
         Habits.PERIOD.value: period,
-        Habits.NOTE.value: note.strip(),
+        Habits.NOTE.value: note,
         Habits.FREQUENCY_FORMAT.value: freq_format,
         Habits.FREQUENCY_AMOUNT.value: freq_amout,
-        Habits.TARGET_METRIC.value: target_metric.strip(),
+        Habits.TARGET_METRIC.value: target_metric,
         Habits.TARGET_AMOUNT.value: target_amount
     }
 
@@ -120,10 +155,23 @@ def get_number_from_input(min=1, max=math.inf):
         num = input(f"Please provide a number between {min} and {max}\n")
     return int(num)
 
+def is_float(num):
+    try:
+        float(num)
+    except Exception as e:
+        return False
+    return True
+
+def get_float_bigger_than_from_input(min=1):
+    num = input().strip()
+    while not is_float(num) or float(num) < min:
+        num = input(f"Please provide a number >= {min}\n")
+    return float(num)
+
 def get_frequency_amount(freq_format: int):
     if freq_format in Frequency.get_single_freq_amount():
         return 1
-    every_z_amount_of_what = FREQUENCY_DICT[freq_format].split()[2] # days / weeks / months
+    every_z_amount_of_what = FREQUENCY_DICT[freq_format].split()[-1] # days / weeks / months
     print(f"You have chosen to do this habit every certain amount of {every_z_amount_of_what}")
     print("Please insert the desired amount:")
 
@@ -156,14 +204,20 @@ def get_target():
     if len(metric) == 0:
         return (None, None)
     print(f"Please insert the target amount of this habit (in {metric}):")
-    target = get_number_from_input(min=1)
+    target = get_float_bigger_than_from_input(min=0) # if someone want to quit smoking - he can set to smoke 0 cigarettes :)
     return (metric, target)
 
+def get_title():
+    print("Describe the habit in a few words:")
+    title = input().strip()
+    while len(title) == 0:
+        input("Please provide a valid title:\n")
+    return title
 
 def get_new_habit():
     # get title
-    print("Describe the habit in a few words:")
-    title = input()
+    title = get_title()
+
     # get period
     print("How many days you want to do this habit? If not sure skip by pressing Enter")
     period = input().strip()
@@ -183,10 +237,12 @@ def get_new_habit():
     print("If you have a note for your future self, please provide it, otherwise press enter")
     note = input()
 
-    return get_habit_dictionary(title=title, 
+    return get_habit_dictionary_str_keys(title=title, 
                                 period=period_converted, 
                                 note=note, 
                                 freq_format=frequency_format, 
                                 freq_amout=frequency_amount, 
                                 target_metric=target_metric, 
                                 target_amount=target_amount)
+
+

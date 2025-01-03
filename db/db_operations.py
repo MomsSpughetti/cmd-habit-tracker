@@ -2,11 +2,13 @@
 import pandas as pd
 import sqlite3
 from faker import Faker
-import db.tools as db
+import db.tools as tools
 import os
 import db.queries as queries
 import c_logging.logger as log
 import exceptions.exceptions as exceptions
+import db.models as models
+
 
 def execute_query(query, params=''):
     """
@@ -19,7 +21,7 @@ def execute_query(query, params=''):
     """
     result = None
     try:
-        with sqlite3.connect(db.DATABASE) as connection:
+        with sqlite3.connect(tools.DATABASE) as connection:
             connection.set_trace_callback(log.logger().info)
             cursor = connection.cursor()
             cursor.execute(query, (params))
@@ -44,7 +46,7 @@ def executemany_query(query, params=''):
     """
     result = None
     try:
-        with sqlite3.connect(db.DATABASE) as connection:
+        with sqlite3.connect(tools.DATABASE) as connection:
             connection.set_trace_callback(log.logger().info)
             cursor = connection.cursor()
             cursor.executemany(query, tuple(params))
@@ -65,8 +67,8 @@ def create_tables():
     
         
 def drop_db():
-    if os.path.exists(db.DATABASE):
-         os.remove(db.DATABASE)
+    if os.path.exists(tools.DATABASE):
+         os.remove(tools.DATABASE)
 
 
 def drop_tables():
@@ -87,8 +89,27 @@ def get_habit(id: int):
     """
     return execute_query(queries.get_habit_query(), {'id': id})
 
+def get_habit_by_title(habit_title: str) -> models.Habit:
+    """
+    return value:
+        an object of models.Habit class
+    """
+    results = execute_query(queries.get_habit_by_title_query(), {f'{tools.Habits.TITLE.value}': habit_title})
+    if len(results) == 0:
+        raise exceptions.HabitNotFound(habit_title=habit_title)
+    
+    habit = models.Habit()
+    habit.set_habit_values(results[0])
+    return habit
+
 def get_all_habits():
-    return execute_query(queries.get_all_habits())
+    """
+    Returns a list of models.Habit objects
+    """
+    results = execute_query(queries.get_all_habits())
+    habits = [models.Habit() for _ in results]
+    [habit.set_habit_values(res) for habit, res in zip(habits, results)]
+    return habits
 
 
 def add_habit(habit):

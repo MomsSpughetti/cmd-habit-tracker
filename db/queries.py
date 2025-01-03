@@ -80,6 +80,11 @@ def get_habit_query():
     SELECT * FROM {db.Tables.HABITS}
     WHERE {db.Habits.ID}=:id
     """
+def get_habit_by_title_query():
+    return f"""
+    SELECT * FROM {db.Tables.HABITS}
+    WHERE {db.Habits.TITLE}=:{db.Habits.TITLE}
+    """
 
 def get_all_habits():
     return f"""
