@@ -30,7 +30,7 @@ def generate_single_habit(goal: str):
     model_id = "mistralai/Mixtral-8x7B-Instruct-v0.1"
     model_id2 = "mistralai/Mistral-7B-Instruct-v0.2"
     API_URL = "https://api-inference.huggingface.co/models/" + model_id2
-    headers = {"Authorization": "Bearer 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"}
+    headers = {"Authorization": f"Bearer {token}"}
     payload = {
         
         "inputs": f"""
