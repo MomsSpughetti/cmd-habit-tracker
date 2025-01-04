@@ -2,7 +2,7 @@
 import pandas as pd
 import sqlite3
 from faker import Faker
-import db.tools as tools
+import utils.data as data
 import os
 import db.queries as queries
 import c_logging.logger as log
@@ -21,7 +21,7 @@ def execute_query(query, params=''):
     """
     result = None
     try:
-        with sqlite3.connect(tools.DATABASE) as connection:
+        with sqlite3.connect(data.DATABASE) as connection:
             connection.set_trace_callback(log.logger().info)
             cursor = connection.cursor()
             cursor.execute(query, (params))
@@ -46,7 +46,7 @@ def executemany_query(query, params=''):
     """
     result = None
     try:
-        with sqlite3.connect(tools.DATABASE) as connection:
+        with sqlite3.connect(data.DATABASE) as connection:
             connection.set_trace_callback(log.logger().info)
             cursor = connection.cursor()
             cursor.executemany(query, tuple(params))
@@ -67,8 +67,8 @@ def create_tables():
     
         
 def drop_db():
-    if os.path.exists(tools.DATABASE):
-         os.remove(tools.DATABASE)
+    if os.path.exists(data.DATABASE):
+         os.remove(data.DATABASE)
 
 
 def drop_tables():
@@ -94,7 +94,7 @@ def get_habit_by_title(habit_title: str) -> models.Habit:
     return value:
         an object of models.Habit class
     """
-    results = execute_query(queries.get_habit_by_title_query(), {f'{tools.Habits.TITLE.value}': habit_title})
+    results = execute_query(queries.get_habit_by_title_query(), {f'{data.Habits.TITLE.value}': habit_title})
     if len(results) == 0:
         raise exceptions.HabitNotFound(habit_title=habit_title)
     

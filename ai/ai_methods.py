@@ -1,9 +1,8 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import requests
-from db.tools import DOCUMENTAION, get_habit_from_str
+from utils.data import DOCUMENTAION
 # import os module
 import os
-import wrapper_functions as wf
 from db.db_operations import add_habit
 from db.models import Habit
 from random import randint

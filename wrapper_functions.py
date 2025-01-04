@@ -1,16 +1,18 @@
 import db.db_operations as db
 import c_logging.logger as log
-from db.tools import get_new_habit, Commands, set_test_mode
-import db.tools as tools
+from utils.aux import get_new_habit, set_test_mode, get_goal
+from db.models import Habit
+import utils.data as data
 import exceptions.exceptions as exceptions
 from pandas import DataFrame
-from ai.ai_methods import generate_habit
+from ai.ai_methods import generate_single_habit
 
 
 def quick_test():
     # add()
     # print(db.get_habit_by_title('mama'))
-    generate_habit("I am suffering from bad sleeping, can you suggest me a habit to track so I can recover.")
+    # generate_single_habit("I am suffering from bad sleeping, can you suggest me a habit to track so I can recover.")
+    reset()
     pass
 
 ################################ Main wrappers ################################
@@ -72,7 +74,7 @@ def add():
 def help():
     """Prints all the possible commands with their usage"""
     print()
-    for command_usage in Commands.get_commands().values():
+    for command_usage in data.Commands.get_commands().values():
         print(command_usage + "\n")
 
 def ask():
@@ -103,14 +105,14 @@ def habits():
 def generate():
     generate_new = 1
     while generate_new:
-        goal = tools.get_goal()
-        suggested_habit = generate_habit(goal)
+        goal = get_goal()
+        suggested_habit = generate_single_habit(goal)
         print(suggested_habit)
         print()
         print("Do you want to add this habit?")
         answer = input()
         if answer.strip().lower() in ['yes', 'y']:
-            db.add_habit(tools.get_habit_from_str(suggested_habit).get_dict_column_value())
+            db.add_habit(Habit.get_habit_from_str(suggested_habit).get_dict_column_value())
             print("Habit was added. Run 'habits' to see it")
             generate_new = 0
         else:
@@ -128,7 +130,7 @@ def get_command() -> str:
     while len(command) == 0:
         command = input("\n>>> ")
     main_command = command.split()[0]
-    while main_command not in Commands.get_commands().keys():
+    while main_command not in data.Commands.get_commands().keys():
         print("Command not found. Use the command 'help' to see possible Commands.\n")
         command = input(">>> ").strip()
         while len(command) == 0:
@@ -143,23 +145,25 @@ def execute_command(command: str):
         command: a string containing the whole command
     """
 
-    if command == Commands.ADD.value:
+    if command == data.Commands.ADD.value:
         add()
-    elif command == Commands.TRACK.value:
+    elif command == data.Commands.TRACK.value:
         pass
-    elif command == Commands.ARCHIVE.value:
+    elif command == data.Commands.ARCHIVE.value:
         pass
-    elif command == Commands.DELETE.value:
+    elif command == data.Commands.DELETE.value:
         pass
-    elif command == Commands.HABITS.value:
+    elif command == data.Commands.HABITS.value:
         habits()
-    elif command == Commands.HELP.value:
+    elif command == data.Commands.HELP.value:
         help()
-    elif command == Commands.PROGRESS.value:
+    elif command == data.Commands.PROGRESS.value:
         pass
-    elif command == Commands.UPDATE.value:
+    elif command == data.Commands.UPDATE.value:
         pass
-    elif command == Commands.EXIT.value:
+    elif command == data.Commands.EXIT.value:
         close_app()
+    elif command == data.Commands.GENERATE.value:
+        generate()
     else:
         return

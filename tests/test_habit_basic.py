@@ -1,5 +1,5 @@
 import wrapper_functions as wf
-from db.tools import Habits
+from utils.data import Habits
 from db.db_operations import get_habit_by_title
 
 def test_habit_addition(monkeypatch):
