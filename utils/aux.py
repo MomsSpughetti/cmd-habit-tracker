@@ -176,6 +176,12 @@ def get_goal():
     goal = input().strip()
     return goal
 
+def get_question():
+    print("Here you can ask a question to know more about how to use this app.")
+    print("In order to get better results, please ask in a question format, and be as detailed as possible.")
+    question = input("My question: ")
+    return question.strip()
+
 def get_period(period: str):
     """Parameters:
         period - a string containg a number as the first word after calling split()

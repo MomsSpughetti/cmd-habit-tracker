@@ -72,6 +72,7 @@ class Commands(Enum):
     DELETE = "delete"
     UPDATE = "update"
     GENERATE = "generate"
+    DOCS = "docs"
 
     # for tracking
     TRACK = "track" # provide tracking info for a specific date
@@ -80,10 +81,11 @@ class Commands(Enum):
         """returns a dict(str, str) of all possible commands - command: <usage>"""
         return {
             Commands.ADD.value: "add - to add a new habit",
-            Commands.ARCHIVE.value: "Not available",
-            Commands.DELETE.value: "Not available",
-            Commands.HABITS.value: "Not available",
+            # Commands.ARCHIVE.value: "Not available",
+            # Commands.DELETE.value: "Not available",
+            Commands.HABITS.value: "habits - see all your habits",
             Commands.HELP.value: "help - See possible commands",
+            Commands.DOCS.value: "docs - ask the program what you need to do",
             Commands.PROGRESS.value: "progress <Year> <Month> - Shows the progress for a specific month",
             Commands.UPDATE.value: "Not available",
             Commands.TRACK.value: "Not available",
@@ -130,8 +132,56 @@ class Tables(Enum):
     def __str__(self):
         return self.value
 
-DOCUMENTAION = """
+DOCUMENTATION = """
+**Habit Tracker with AI - FAQ**
 
+**Q: What can I ask?** 
+A: Ask about the tool, commands, features, troubleshooting, or limitations.
+
+**Q: What is this tool?**
+A: Command-line habit tracker.
+
+**Q: What is this app?**
+A: Command-line habit tracker app.
+
+**Q: What can I do?** 
+A: Track habits, get AI suggestions, customize tracking.
+
+**Q: How do I add a habit?**
+A: Use `add` or `generate`.
+
+**Q: How do I view habits?**
+A: Use `habits`.
+
+**Q: How do I see progress?**
+A: Use `progress <year> <month>`.
+
+**Q: How do I get AI suggestions?**
+A: Use `generate`.
+
+**Q: What is a good feature?**
+A: AI-powered habit suggestions.
+
+**Q: Why is this app special?**
+A: AI suggestions & user-friendly interface.
+
+**Q: How do I tell my goals?**
+A: Use `generate`.
+
+**Q: How do I get help?**
+A: Use `help`.
+
+**Q: How do I exit?**
+A: Use `exit`.
+
+**Q: Are there any limitations?**
+A: Some features may be under development.
+
+**Q: Is this tool suitable for everyone?**
+A: Consult a healthcare professional.
+
+**Disclaimer:** 
+For informational purposes only. 
 """
 
 ########################################## Functions ##########################################

@@ -1,18 +1,18 @@
 import db.db_operations as db
 import c_logging.logger as log
-from utils.aux import get_new_habit, set_test_mode, get_goal
+from utils.aux import get_new_habit, set_test_mode, get_goal, get_question
 from db.models import Habit
 import utils.data as data
 import exceptions.exceptions as exceptions
 from pandas import DataFrame
-from ai.ai_methods import generate_single_habit
+from ai.ai_methods import generate_single_habit, answer_question_for_app_use
 
 
 def quick_test():
     # add()
     # print(db.get_habit_by_title('mama'))
     # generate_single_habit("I am suffering from bad sleeping, can you suggest me a habit to track so I can recover.")
-    reset()
+    # reset()
     pass
 
 ################################ Main wrappers ################################
@@ -120,7 +120,12 @@ def generate():
             answer = input()
             if answer.strip().lower() in ['yes', 'y']:
                 generate_new = 1
+            else:
+                generate_new = 0
 
+def docs():
+    question  = get_question()
+    print(answer_question_for_app_use(question))
 
 ################################ Command handlers ################################
 
@@ -165,5 +170,7 @@ def execute_command(command: str):
         close_app()
     elif command == data.Commands.GENERATE.value:
         generate()
+    elif command == data.Commands.DOCS.value:
+        docs()
     else:
         return

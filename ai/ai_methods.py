@@ -1,6 +1,6 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import requests
-from utils.data import DOCUMENTAION
+from utils.data import DOCUMENTATION
 # import os module
 import os
 from db.db_operations import add_habit
@@ -11,6 +11,7 @@ from random import randint
 token = os.environ['HUGGING_FACE_TOKEN']
 
 def answer_question_for_app_use(question: str):
+    model_id1 = "distilbert/distilbert-base-uncased-distilled-squad"
     model_id = "deepset/roberta-base-squad2"
     model_id2 = "mistralai/Mistral-7B-Instruct-v0.2"
     API_URL = "https://api-inference.huggingface.co/models/" + model_id
@@ -18,11 +19,11 @@ def answer_question_for_app_use(question: str):
     payload = {
         "inputs" : {
             "question" : question,
-            "context": DOCUMENTAION
+            "context": DOCUMENTATION
         }
     }
     response = requests.post(API_URL, headers=headers, json=payload)
-    print(response.json())
+    return response.json()['answer'] if 'answer' in response.json() else ""
 
 def generate_single_habit(goal: str):
     # https://api-inference.huggingface.co/models/<MODEL_ID>
@@ -50,10 +51,7 @@ def generate_single_habit(goal: str):
                     target per time: 1 miles
                     note: See your granpa, his health is bad, so do not be like him, play sports and keep healthy
                     Please just write the habit, not any other text, provide an output as the provided template
-                    """,
-        "parameters": {
-            'seed': randint(1,100)
-        }
+                    """
     }
 
 
