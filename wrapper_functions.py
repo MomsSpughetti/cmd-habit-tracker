@@ -127,6 +127,15 @@ def docs():
     question  = get_question()
     print(answer_question_for_app_use(question))
 
+def command_not_found():
+    print("Command not found. You can run `help` for more information.")
+    print("")
+    print("Do you have a specific question?")
+    answer = input("Your answer (yes/no): ")
+    if answer.strip().lower() in ["yes", "y", "yeah", "ye", "yess", "yea", "yup", "es", "si"]:
+        question  = input("\nWhat are you looking for?\nType here: ")
+        print(answer_question_for_app_use(question))
+
 ################################ Command handlers ################################
 
 def get_command() -> str:
@@ -136,7 +145,7 @@ def get_command() -> str:
         command = input("\n>>> ")
     main_command = command.split()[0]
     while main_command not in data.Commands.get_commands().keys():
-        print("Command not found. Use the command 'help' to see possible Commands.\n")
+        command_not_found()
         command = input(">>> ").strip()
         while len(command) == 0:
             command = input("\n>>> ")

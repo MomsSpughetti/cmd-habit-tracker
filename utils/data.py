@@ -133,55 +133,24 @@ class Tables(Enum):
         return self.value
 
 DOCUMENTATION = """
-**Habit Tracker with AI - FAQ**
-
-**Q: What can I ask?** 
-A: Ask about the tool, commands, features, troubleshooting, or limitations.
-
-**Q: What is this tool?**
-A: Command-line habit tracker.
-
-**Q: What is this app?**
-A: Command-line habit tracker app.
-
-**Q: What can I do?** 
-A: Track habits, get AI suggestions, customize tracking.
-
-**Q: How do I add a habit?**
-A: Use `add` or `generate`.
-
-**Q: How do I view habits?**
-A: Use `habits`.
-
-**Q: How do I see progress?**
-A: Use `progress <year> <month>`.
-
-**Q: How do I get AI suggestions?**
-A: Use `generate`.
-
-**Q: What is a good feature?**
-A: AI-powered habit suggestions.
-
-**Q: Why is this app special?**
-A: AI suggestions & user-friendly interface.
-
-**Q: How do I tell my goals?**
-A: Use `generate`.
-
-**Q: How do I get help?**
-A: Use `help`.
-
-**Q: How do I exit?**
-A: Use `exit`.
-
-**Q: Are there any limitations?**
-A: Some features may be under development.
-
-**Q: Is this tool suitable for everyone?**
-A: Consult a healthcare professional.
-
-**Disclaimer:** 
-For informational purposes only. 
+You can ask about the tool, commands, features, troubleshooting, or limitations.
+This tool is a Command-line habit tracker.
+This app is a Command-line habit tracker app.
+You can Track habits, get AI suggestions, customize tracking.
+Some good commands are: `help`, `docs`, `generate`, `add`, `habits`, `track`
+You can add a habit by running `add` or `generate`.
+You can view your own habits by running `habits`.
+To view your progress, you can run `progress <year> <month>`.
+You can get an AI suggestions by running `generate`.
+One of the best features of this app is the AI-powered habit suggestions. You can use this feature by running `generate`
+This app is special and unique for many reasons. It offers AI suggestions & user-friendly interface.
+In order to tell the problem your goal run `generate`.
+To get help run `help`.
+To exit this app you should run `exit`.
+To exit this program you should run `exit`.
+There are some limitations of this app, since some features may be under development.
+This tool is designed and suitable for people that want to achieve their goals.
+Clearing the previous text is not supported yet!
 """
 
 ########################################## Functions ##########################################
