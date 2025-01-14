@@ -106,7 +106,7 @@ def get_all_habits():
     """
     Returns a list of models.Habit objects
     """
-    results = execute_query(queries.get_all_habits())
+    results = execute_query(queries.get_all_habits_query())
     habits = [models.Habit() for _ in results]
     [habit.set_habit_values(res) for habit, res in zip(habits, results)]
     return habits
@@ -129,7 +129,13 @@ def add_habit(habit):
 
 # Basic operations for table 'tracker'
 
-
-
+def get_all_track_info_of_date(date: str):
+    """params: date (YYYY-MM-DD)
+    returns a list of tuples of the form (id, habit_id, date, achieved, explanation)"""
+    query_params = {data.Tracker.DATE.value : date}
+    results = execute_query(queries.get_track_info_of_date_query, query_params)
+    records = [models.Record() for _ in results]
+    [record.set_record_values(res) for record, res in zip(records, results)]
+    return records
 
 

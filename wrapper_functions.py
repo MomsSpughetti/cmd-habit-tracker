@@ -1,6 +1,6 @@
 import db.db_operations as db
 import c_logging.logger as log
-from utils.aux import get_new_habit, set_test_mode, get_goal, get_question
+from utils.aux import get_new_habit, set_test_mode, get_goal, get_question, get_date, to_sql_date_foramt, show_tracking_info, get_choice
 from db.models import Habit
 import utils.data as data
 import exceptions.exceptions as exceptions
@@ -77,22 +77,6 @@ def help():
     for command_usage in data.Commands.get_commands().values():
         print(command_usage + "\n")
 
-def ask():
-    """
-    Will ask the user about each habit if he completed yesterday, 
-    if he already answered those or there are no habits => tell the user
-    """
-
-    # get habits
-
-    # if no habits print
-    # get rows in the table named tracker with yesterday's date
-    # if there are rows ? in the last query =? ask about the habkits that are not there
-    try:
-        print(DataFrame(db.get_all_habits()))
-    except Exception as e:
-        print(e)
-        close_app()
 
 def progress(month: int, year: int):
     """Prints the progress of all habits for the specified month"""
@@ -136,6 +120,37 @@ def command_not_found():
         question  = input("\nWhat are you looking for?\nType here: ")
         print(answer_question_for_app_use(question))
 
+
+def automatic_track():
+    """Runs upon starting the program - let's user track todays info"""
+    pass
+
+def track_date():
+    """Wrapper function that lets the user insert tracking information for a specific date"""
+    # get date
+    year, month, day = get_date()
+    date = to_sql_date_foramt(year, month, day)
+
+    # get all tracking info from that date then show it
+    records_of_date = db.get_all_track_info_of_date(date)
+    show_tracking_info(records_of_date, date)
+
+    # let the user choose
+    option = get_choice(data.Tracking_options.get_options())
+    #   track all habits again at this date
+    if option == data.Tracking_options.TRACK_ALL.value:
+        # Got here
+        pass
+    elif option == data.Tracking_options.EXIT.value:
+        print("Operation stopped!")
+    else:
+        #   track only the habits that were not tracked at this date
+        #   track a specific habit
+        print("Not supported yet!")
+
+
+def track():
+    pass
 ################################ Command handlers ################################
 
 def get_command() -> str:
@@ -162,7 +177,7 @@ def execute_command(command: str):
     if command == data.Commands.ADD.value:
         add()
     elif command == data.Commands.TRACK.value:
-        pass
+        track()
     elif command == data.Commands.ARCHIVE.value:
         pass
     elif command == data.Commands.DELETE.value:

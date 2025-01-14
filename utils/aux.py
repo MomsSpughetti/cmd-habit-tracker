@@ -2,6 +2,9 @@ import math
 from collections import defaultdict
 from exceptions.exceptions import CorruptedInput
 from utils.data import Habits, FREQUENCY_DICT, Frequency
+from datetime import date
+from calendar import monthrange
+from pandas import DataFrame
 
 def set_test_mode():
     global TEST_MODE
@@ -197,4 +200,74 @@ def get_period(period: str):
         return None
     else:
         return period_parts[0]
+
+def get_year():
+    print("Year:")
+    year = input().strip()
+    current_date = date.today()
+    while not year.isdigit() or int(year) < 2024 or int(year) > current_date.year:
+        print("Please enter a valid year:\n")
+        year = input().strip()
     
+    return int(year)
+
+def get_month():
+    print("Month:")
+    month = input().strip()
+    while not month.isdigit() or int(month) > 12 or int(month) < 1:
+        print("Please enter a valid month:\n")
+        month = input().strip()
+    
+    return int(month)
+
+def get_day(year: int, month: int):
+    """params: valid year and month - gets a valid day for that specific month-year"""
+    print("Month:")
+    day = input().strip()
+    max_day = monthrange(year=year, month=month)[1]
+    while not day.isdigit() or int(day) > max_day or int(day) < 1:
+        print(f"Please enter a valid day: (1 - {max_day})\n")
+        day = input().strip()
+    
+    return int(day)
+
+def get_date():
+    """returns a tuple (year, month, day)"""
+    print("Enter the date:")
+    year = get_year()
+    month = get_month()
+    day = get_day(year, month)
+
+    return (year, month, day)
+
+def to_sql_date_foramt(year, month, day) -> str:
+    """YYYY-MM-DD"""
+    day_formated = str(day)
+    if day < 10:
+        day_formated = '0'+day_formated
+
+    month_formated = str(month)
+    if month < 10:
+        month_formated = '0'+month_formated
+
+    return year+'-'+month_formated+'-'+day_formated
+
+
+def show_tracking_info(info: list, date):
+    # show the info (if exists)
+    print(f"Tracking info from {date}:\n")
+    if len(info) > 0:
+        print(DataFrame(info))
+    else:
+        print("There is no tracking info for this date!")
+
+def get_choice(options: list[str]):
+    options_dict = {}
+    for idx, option in enumerate(1, options):
+        options_dict[idx] = option
+    [print(f"{idx} {option}" for idx, option in options_dict.items())]
+    choice = get_number_from_input(1, len(options))
+    return choice
+
+
+

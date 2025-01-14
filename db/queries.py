@@ -28,7 +28,7 @@ def tracker_table_creation_query():
         {db.Tracker.ID} INTEGER PRIMARY KEY,
         {db.Tracker.HABIT_ID} INTEGER,
         {db.Tracker.DATE} DATE NOT NULL,
-        {db.Tracker.COMPLETED} BOOLEAN NOT NULL,
+        {db.Tracker.ACHIEVED} INTEGER NOT NULL,
         {db.Tracker.EXPLANATION} TEXT,
         FOREIGN KEY ({db.Tracker.HABIT_ID}) REFERENCES {db.Tables.HABITS}(id)
     );
@@ -55,7 +55,7 @@ def archived_tracker_table_creation_query():
         {db.Tracker.ID} INTEGER PRIMARY KEY,
         {db.Tracker.HABIT_ID} INTEGER,
         {db.Tracker.DATE} DATE NOT NULL,
-        {db.Tracker.COMPLETED} BOOLEAN NOT NULL,
+        {db.Tracker.ACHIEVED} INTEGER NOT NULL,
         {db.Tracker.EXPLANATION} TEXT,
         FOREIGN KEY ({db.Tracker.HABIT_ID}) REFERENCES {db.Tables.ARCHIVED_Habits}(id)
     );
@@ -86,7 +86,7 @@ def get_habit_by_title_query():
     WHERE {db.Habits.TITLE}=:{db.Habits.TITLE}
     """
 
-def get_all_habits():
+def get_all_habits_query():
     return f"""
     SELECT * FROM {db.Tables.HABITS}
     """
@@ -108,7 +108,11 @@ def get_habits_by_title():
 ################################### Tracking queries ###################################
 
 
-
+def get_track_info_of_date_query():
+    return f"""
+    SELECT * FROM {db.Tables.TRACKER}
+    WHERE {db.Tracker.DATE}=:{db.Tracker.DATE}
+    """
 
 
 ################################### Advanced queries ###################################

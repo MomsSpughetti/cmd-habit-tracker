@@ -16,3 +16,6 @@ class CorruptedInput(Exception):
     def __init__(self, _input=""):
         super().__init__(ERROR_MESSAGES[Errors.CORRUPTED_INPUT] + ": " + _input)
 
+class CorruptedRecord(Exception):
+    def __init__(self, _input=""):
+        super().__init__(ERROR_MESSAGES[Errors.CORRUPTED_RECORD])

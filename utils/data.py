@@ -9,12 +9,14 @@ class Errors(Enum):
     CORRUPTED_HABIT = 1
     HABIT_NOT_FOUND = 2
     CORRUPTED_INPUT = 3
+    CORRUPTED_RECORD = 4
 
 ERROR_MESSAGES = {
     Errors.DUPLICATE_HABIT: "Habit was not added because it already exists",
     Errors.CORRUPTED_HABIT: "Habit info is corrupted",
     Errors.HABIT_NOT_FOUND: "Habit not found",
-    Errors.CORRUPTED_INPUT: "An input was corrupted. The input was"
+    Errors.CORRUPTED_INPUT: "An input was corrupted. The input was",
+    Errors.CORRUPTED_RECORD: "Record info is corrupted"
 }
 
 
@@ -117,11 +119,13 @@ class Tracker(Enum):
     ID = "id"
     HABIT_ID = "habit_id"
     DATE = "date"
-    COMPLETED = "completed"
+    ACHIEVED = "achieved"
     EXPLANATION = "explanation"
 
     def __str__(self):
         return self.value
+    def get_number_of_columns():
+        return 5
     
 
 class Tables(Enum):
@@ -131,6 +135,20 @@ class Tables(Enum):
     ARCHIVED_Habits = "archived_habits"
     def __str__(self):
         return self.value
+
+class Tracking_options(Enum):
+    TRACK_ALL = 1
+    TRACK_UNTRACKED = 2
+    TRACK_SINGLE = 3
+    EXIT = 4
+
+    def get_options():
+        return [
+            "Track all habits - will erase previous info",
+            "Track only the habits that are not tracked",
+            "Track a specific habit",
+            "Exit"
+            ]
 
 DOCUMENTATION = """
 You can ask about the tool, commands, features, troubleshooting, or limitations.

@@ -1,7 +1,7 @@
 
 from utils.aux import get_habit_dictionary_str_keys, get_habit_dictionary, get_frequency_from_str, get_target_from_str, get_period, is_float
-from exceptions.exceptions import CorruptedHabit
-from utils.data import Habits, FREQUENCY_DICT
+from exceptions.exceptions import CorruptedHabit, CorruptedRecord
+from utils.data import Habits, FREQUENCY_DICT, Tracker
 from collections import defaultdict
 
 class Habit:
@@ -132,4 +132,30 @@ class Habit:
         - Target: {str(self.target_amount) + " " + str(self.target_metric) if self.target_metric else "Not provided"}
         - Note: {self.note}
         """
+    
+class Record():
+    def __init__(self):
+        self.id = None
+        self.habit_id = None
+        self.date = None
+        self.achieved = None
+        self.explanation = None
+
+    def set_record_values(self, record):
+        """
+        Parameters:
+            record - a tuple (id, habit_id, date, achieved, explanation)
+        return value:
+            a dict {<name1>:value1, ...}
+        
+            Note: This is a very sensitive function :) - its correctness is dependant on the order of columns in the definition of the habits' table - see queries.py
+        """
+        if record == None or len(record) < Tracker.get_number_of_columns():
+            raise CorruptedRecord()
+        
+        self.id=record[0]
+        self.habit_id = record[1]
+        self.date = record[2]
+        self.achieved = record[3]
+        self.explanation = record[4]
     
