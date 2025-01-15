@@ -114,5 +114,10 @@ def get_track_info_of_date_query():
     WHERE {db.Tracker.DATE}=:{db.Tracker.DATE}
     """
 
+def add_track_query():
+    return f"""
+    INSERT INTO {db.Tables.TRACKER} ({db.Tracker.HABIT_ID}, {db.Tracker.DATE}, {db.Tracker.ACHIEVED}, {db.Tracker.EXPLANATION})
+    VALUES (:{db.Tracker.HABIT_ID}, :{db.Tracker.DATE}, :{db.Tracker.ACHIEVED}, :{db.Tracker.EXPLANATION})
+    """
 
 ################################### Advanced queries ###################################

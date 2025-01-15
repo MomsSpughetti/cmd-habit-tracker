@@ -1,4 +1,8 @@
 from enum import Enum
+from datetime import date
+from calendar import monthrange
+from datetime import timedelta
+
 ########################################## Data ##########################################
 
 TEST_MODE = 0
@@ -149,6 +153,67 @@ class Tracking_options(Enum):
             "Track a specific habit",
             "Exit"
             ]
+
+YES_ANSWERS = ["yes", "y", "yeah", "ye", "yess", "yea", "yup", "es", "si"]
+NO_ANSWERS = ["n", "nah", "no", "noo", "nooo", "nooo", "o", "nno"]
+
+
+class Date():
+    def __init__(self):
+        self.year = None
+        self.month = None
+        self.day = None
+    def set_date(self, year: int, month: int, day: int):
+        self.year = year
+        self.month = month
+        self.day = day
+    def get_year_in_Y_format(year: int):
+        year_str = str(year)
+        zeros_to_be_added = 4 - len(year_str)
+        for _ in range(zeros_to_be_added):
+            year_str = "0" + year_str
+        return year_str
+    
+    def get_month_in_M_format(month: int):
+        return str(month) if month < 10 else '0'+str(month)
+    
+    def get_day_in_D_format(day: int):
+        return str(day) if day < 10 else '0'+str(day)
+    
+    def is_year_valid(self):
+        return self.year <= date.year or self.year >= 1
+    
+    def is_month_valid(self):
+        return self.month >= 1 or self.month <= 12
+    
+    def is_day_valid(self):
+        if not (self.day < 1 or self.day > 31 or not self.is_month_valid() or not self.is_year_valid()):
+            max_day = monthrange(year=self.year, month=self.month)[1]
+            return self.day <= max_day
+        return False
+    
+    def is_date_valid(self):
+        return self.is_year_valid() and self.is_month_valid() and self.is_day_valid()
+    
+    def string_format(self):
+        YYYY = self.get_year_in_Y_format(self.year)
+        MM = self.get_month_in_M_format(self.month)
+        DD = self.get_day_in_D_format(self.day)
+        return f"{YYYY}-{MM}-{DD}"
+    
+    def __str__(self):
+        return self.string_format()
+    
+    def get_yesterday():
+        # Get today's date
+        today = date.today()        
+        # Yesterday date
+        yesterday = today - timedelta(days = 1)
+        new_date = Date()
+        new_date.set_date(yesterday.year, yesterday.month, yesterday.day)
+        return new_date
+    def in_future(self):
+        return False
 
 DOCUMENTATION = """
 You can ask about the tool, commands, features, troubleshooting, or limitations.

@@ -139,3 +139,9 @@ def get_all_track_info_of_date(date: str):
     return records
 
 
+def insert_tracking_info_for_a_specific_date(records: list):
+    """
+    records - list of dicts - each record has a dict
+    A single record object holds the tracking info of a specific habit for a specific date
+    """
+    executemany_query(queries.add_track_query())

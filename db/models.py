@@ -1,5 +1,5 @@
 
-from utils.aux import get_habit_dictionary_str_keys, get_habit_dictionary, get_frequency_from_str, get_target_from_str, get_period, is_float
+from utils.aux import get_habit_dictionary_str_keys, get_habit_dictionary, get_frequency_from_str, get_target_from_str, get_period, is_float, get_record_dictionary_str_keys
 from exceptions.exceptions import CorruptedHabit, CorruptedRecord
 from utils.data import Habits, FREQUENCY_DICT, Tracker
 from collections import defaultdict
@@ -158,4 +158,13 @@ class Record():
         self.date = record[2]
         self.achieved = record[3]
         self.explanation = record[4]
+    
+    def get_dict_column_value(self):
+        return get_record_dictionary_str_keys(
+            id=self.id,
+            habit_id=self.habit_id,
+            date=self.date,
+            achieved=self.achieved,
+            explanation=self.explanation
+        )
     

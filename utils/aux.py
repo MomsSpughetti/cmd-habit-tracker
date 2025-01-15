@@ -1,7 +1,7 @@
 import math
 from collections import defaultdict
 from exceptions.exceptions import CorruptedInput
-from utils.data import Habits, FREQUENCY_DICT, Frequency
+from utils.data import Habits, FREQUENCY_DICT, Frequency, YES_ANSWERS, Tracker, Date
 from datetime import date
 from calendar import monthrange
 from pandas import DataFrame
@@ -40,10 +40,19 @@ def get_habit_dictionary_str_keys(title: str, period: int, note: str, freq_forma
         Habits.TARGET_AMOUNT.value: target_amount
     }
 
+def get_record_dictionary_str_keys(habit_id: int, date: str, achieved: int, explanation: str, id=None):
+    return {
+        Tracker.ID.value: id,
+        Tracker.HABIT_ID: habit_id,
+        Tracker.DATE: date,
+        Tracker.ACHIEVED: achieved,
+        Tracker.EXPLANATION: explanation
+    }
+
 def get_number_from_input(min=1, max=math.inf):
     num = input().strip()
     while not num.isdigit() or int(num) < min or int(num) > max:
-        num = input(f"Please provide a number between {min} and {max}\n")
+        num = input(f"Please provide a number >= {min} {"" if max == math.inf else "and <="+max}\n")
     return int(num)
 
 def is_float(num):
@@ -206,12 +215,12 @@ def get_year():
     year = input().strip()
     current_date = date.today()
     while not year.isdigit() or int(year) < 2024 or int(year) > current_date.year:
-        print("Please enter a valid year:\n")
+        print("Please enter a valid year (not in the future):\n")
         year = input().strip()
     
     return int(year)
 
-def get_month():
+def get_month(year: int):
     print("Month:")
     month = input().strip()
     while not month.isdigit() or int(month) > 12 or int(month) < 1:
@@ -237,8 +246,9 @@ def get_date():
     year = get_year()
     month = get_month()
     day = get_day(year, month)
-
-    return (year, month, day)
+    date = Date()
+    date.set_date(year, month, day)
+    return date
 
 def to_sql_date_foramt(year, month, day) -> str:
     """YYYY-MM-DD"""
@@ -269,5 +279,12 @@ def get_choice(options: list[str]):
     choice = get_number_from_input(1, len(options))
     return choice
 
+def get_yes_no_answer():
+    """Returns a boolean that corresponds to the user input"""
+    answer = input()
+    if answer.strip().lower() in YES_ANSWERS:
+        return True
+    return False
 
-
+def get_str_input():
+    return input().strip().lower()

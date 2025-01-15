@@ -1,6 +1,7 @@
 import db.db_operations as db
 import c_logging.logger as log
 from utils.aux import get_new_habit, set_test_mode, get_goal, get_question, get_date, to_sql_date_foramt, show_tracking_info, get_choice
+from helper_functions import track_date
 from db.models import Habit
 import utils.data as data
 import exceptions.exceptions as exceptions
@@ -69,7 +70,6 @@ def add():
         print(e)
     except Exception as e:
         print(e)
-        close_app()
 
 def help():
     """Prints all the possible commands with their usage"""
@@ -116,7 +116,7 @@ def command_not_found():
     print("")
     print("Do you have a specific question?")
     answer = input("Your answer (yes/no): ")
-    if answer.strip().lower() in ["yes", "y", "yeah", "ye", "yess", "yea", "yup", "es", "si"]:
+    if answer.strip().lower() in data.YES_ANSWERS:
         question  = input("\nWhat are you looking for?\nType here: ")
         print(answer_question_for_app_use(question))
 
@@ -125,32 +125,22 @@ def automatic_track():
     """Runs upon starting the program - let's user track todays info"""
     pass
 
-def track_date():
-    """Wrapper function that lets the user insert tracking information for a specific date"""
-    # get date
-    year, month, day = get_date()
-    date = to_sql_date_foramt(year, month, day)
-
-    # get all tracking info from that date then show it
-    records_of_date = db.get_all_track_info_of_date(date)
-    show_tracking_info(records_of_date, date)
-
-    # let the user choose
-    option = get_choice(data.Tracking_options.get_options())
-    #   track all habits again at this date
-    if option == data.Tracking_options.TRACK_ALL.value:
-        # Got here
-        pass
-    elif option == data.Tracking_options.EXIT.value:
-        print("Operation stopped!")
-    else:
-        #   track only the habits that were not tracked at this date
-        #   track a specific habit
-        print("Not supported yet!")
-
 
 def track():
-    pass
+    print("Choose an option:")
+    choice = get_choice([
+        "Insert tracking info for yesterday",
+        "Insert tracking info for a specific date"
+    ])
+    date = get_date() if choice == 1 else data.Date.get_yesterday()
+    if date.in_future():
+        print("Please enter a valid date (Not in the future)")
+    else:
+        try:
+            track_date(date=date)
+        except Exception as e:
+            print(e)
+    
 ################################ Command handlers ################################
 
 def get_command() -> str:
