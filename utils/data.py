@@ -94,7 +94,7 @@ class Commands(Enum):
             Commands.DOCS.value: "docs - ask the program what you need to do",
             Commands.PROGRESS.value: "progress <Year> <Month> - Shows the progress for a specific month",
             Commands.UPDATE.value: "Not available",
-            Commands.TRACK.value: "Not available",
+            Commands.TRACK.value: "track - run to insert tracking info for a specific habit",
             Commands.EXIT.value: "exit",
             Commands.GENERATE.value: "generate - to make the AI suggest you a habit based on your goal"
         }
@@ -175,10 +175,10 @@ class Date():
         return year_str
     
     def get_month_in_M_format(month: int):
-        return str(month) if month < 10 else '0'+str(month)
+        return str(month) if month >= 10 else '0'+str(month)
     
     def get_day_in_D_format(day: int):
-        return str(day) if day < 10 else '0'+str(day)
+        return str(day) if day >= 10 else '0'+str(day)
     
     def is_year_valid(self):
         return self.year <= date.year or self.year >= 1
@@ -196,9 +196,9 @@ class Date():
         return self.is_year_valid() and self.is_month_valid() and self.is_day_valid()
     
     def string_format(self):
-        YYYY = self.get_year_in_Y_format(self.year)
-        MM = self.get_month_in_M_format(self.month)
-        DD = self.get_day_in_D_format(self.day)
+        YYYY = Date.get_year_in_Y_format(self.year)
+        MM = Date.get_month_in_M_format(self.month)
+        DD = Date.get_day_in_D_format(self.day)
         return f"{YYYY}-{MM}-{DD}"
     
     def __str__(self):

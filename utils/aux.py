@@ -1,5 +1,6 @@
 import math
 from collections import defaultdict
+from typing import List
 from exceptions.exceptions import CorruptedInput
 from utils.data import Habits, FREQUENCY_DICT, Frequency, YES_ANSWERS, Tracker, Date
 from datetime import date
@@ -43,16 +44,16 @@ def get_habit_dictionary_str_keys(title: str, period: int, note: str, freq_forma
 def get_record_dictionary_str_keys(habit_id: int, date: str, achieved: int, explanation: str, id=None):
     return {
         Tracker.ID.value: id,
-        Tracker.HABIT_ID: habit_id,
-        Tracker.DATE: date,
-        Tracker.ACHIEVED: achieved,
-        Tracker.EXPLANATION: explanation
+        Tracker.HABIT_ID.value: habit_id,
+        Tracker.DATE.value: date,
+        Tracker.ACHIEVED.value: achieved,
+        Tracker.EXPLANATION.value: explanation
     }
 
 def get_number_from_input(min=1, max=math.inf):
     num = input().strip()
     while not num.isdigit() or int(num) < min or int(num) > max:
-        num = input(f"Please provide a number >= {min} {"" if max == math.inf else "and <="+max}\n")
+        num = input(f"Please provide a number >= {min} {'' if max == math.inf else 'and <='+str(max)}\n")
     return int(num)
 
 def is_float(num):
@@ -211,33 +212,26 @@ def get_period(period: str):
         return period_parts[0]
 
 def get_year():
-    print("Year:")
-    year = input().strip()
+    year = input("Year: ").strip()
     current_date = date.today()
     while not year.isdigit() or int(year) < 2024 or int(year) > current_date.year:
-        print("Please enter a valid year (not in the future):\n")
-        year = input().strip()
+        year = input("Please enter a valid year:").strip()
     
     return int(year)
 
-def get_month(year: int):
-    print("Month:")
-    month = input().strip()
+def get_month():
+    month = input("Month: ").strip()
     while not month.isdigit() or int(month) > 12 or int(month) < 1:
-        print("Please enter a valid month:\n")
-        month = input().strip()
+        month = input("Please enter a valid month:").strip()
     
     return int(month)
 
 def get_day(year: int, month: int):
     """params: valid year and month - gets a valid day for that specific month-year"""
-    print("Month:")
-    day = input().strip()
+    day = input("Day:").strip()
     max_day = monthrange(year=year, month=month)[1]
     while not day.isdigit() or int(day) > max_day or int(day) < 1:
-        print(f"Please enter a valid day: (1 - {max_day})\n")
-        day = input().strip()
-    
+        day = input(f"Please enter a valid day: (1 - {max_day})\n").strip()
     return int(day)
 
 def get_date():
@@ -263,19 +257,19 @@ def to_sql_date_foramt(year, month, day) -> str:
     return year+'-'+month_formated+'-'+day_formated
 
 
-def show_tracking_info(info: list, date):
+def show_tracking_info(info, date):
     # show the info (if exists)
-    print(f"Tracking info from {date}:\n")
+    print(f"\nTracking info from {date}:")
     if len(info) > 0:
         print(DataFrame(info))
     else:
-        print("There is no tracking info for this date!")
+        print("There is no tracking info for this date!\n")
 
-def get_choice(options: list[str]):
+def get_choice(options: List[str]):
     options_dict = {}
-    for idx, option in enumerate(1, options):
+    for idx, option in enumerate(start=1, iterable=options):
         options_dict[idx] = option
-    [print(f"{idx} {option}" for idx, option in options_dict.items())]
+    [print(f"{idx} {option}") for idx, option in options_dict.items()]
     choice = get_number_from_input(1, len(options))
     return choice
 

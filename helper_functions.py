@@ -1,3 +1,4 @@
+from typing import List
 import utils.aux as aux_funcs
 from db.models import Habit, Record
 import utils.data as data
@@ -27,7 +28,7 @@ def get_tracking_info_for_measurable_habit(habit: Habit, date: str):
     question = f"How much have I completed out of {habit.target_amount} {habit.target_metric}?" if habit_is_measurable != None else f"Have I completed this habit at this date?"
     helper_strs = [f"out of {habit.target_amount}", "Yes/No"]
     print(question)
-    answer = aux_funcs.get_number_from_input(0, 9999)
+    answer = aux_funcs.get_float_bigger_than_from_input(0)
     explanation = ""
     if answer < habit.target_amount:
         print(f"Please provide an explanation of why you did not reach the target ({habit.target_amount} {habit.target_metric}):")
@@ -35,7 +36,7 @@ def get_tracking_info_for_measurable_habit(habit: Habit, date: str):
     new_record.set_record_values((None, habit.id, date, answer, explanation))
     return new_record
 
-def get_tracking_info_from_user_for_each_habit(habits: list[Habit], date: data.Date):
+def get_tracking_info_from_user_for_each_habit(habits: List[Habit], date: data.Date):
     """
     Asks the user if he completed a habit for each habit in habits
     params:
@@ -70,6 +71,7 @@ def track_date(date: data.Date):
     aux_funcs.show_tracking_info(records_of_date, date.string_format())
 
     # let the user choose
+    print("\nPlease choose an option:")
     option = aux_funcs.get_choice(data.Tracking_options.get_options())
     #   track all habits again at this date
     if option == data.Tracking_options.TRACK_ALL.value:

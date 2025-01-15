@@ -96,11 +96,15 @@ def generate():
         print("Do you want to add this habit?")
         answer = input()
         if answer.strip().lower() in ['yes', 'y']:
-            db.add_habit(Habit.get_habit_from_str(suggested_habit).get_dict_column_value())
+            try:
+                db.add_habit(Habit.get_habit_from_str(suggested_habit).get_dict_column_value())
+            except Exception as e:
+                print(e)
+                return
             print("Habit was added. Run 'habits' to see it")
             generate_new = 0
         else:
-            print("Habit was not added, do you want to suggest a new habit?")
+            print("Habit was not added, do you want to generate a new habit?")
             answer = input()
             if answer.strip().lower() in ['yes', 'y']:
                 generate_new = 1
@@ -132,7 +136,7 @@ def track():
         "Insert tracking info for yesterday",
         "Insert tracking info for a specific date"
     ])
-    date = get_date() if choice == 1 else data.Date.get_yesterday()
+    date = get_date() if choice == 2 else data.Date.get_yesterday()
     if date.in_future():
         print("Please enter a valid date (Not in the future)")
     else:

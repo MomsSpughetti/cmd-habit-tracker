@@ -133,7 +133,7 @@ def get_all_track_info_of_date(date: str):
     """params: date (YYYY-MM-DD)
     returns a list of tuples of the form (id, habit_id, date, achieved, explanation)"""
     query_params = {data.Tracker.DATE.value : date}
-    results = execute_query(queries.get_track_info_of_date_query, query_params)
+    results = execute_query(queries.get_track_info_of_date_query(), query_params)
     records = [models.Record() for _ in results]
     [record.set_record_values(res) for record, res in zip(records, results)]
     return records
@@ -144,4 +144,4 @@ def insert_tracking_info_for_a_specific_date(records: list):
     records - list of dicts - each record has a dict
     A single record object holds the tracking info of a specific habit for a specific date
     """
-    executemany_query(queries.add_track_query())
+    executemany_query(queries.add_track_query(), records)
