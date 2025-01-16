@@ -212,6 +212,14 @@ class Date():
         new_date = Date()
         new_date.set_date(yesterday.year, yesterday.month, yesterday.day)
         return new_date
+    
+    def get_today():
+        # Get today's date
+        today = date.today()        
+        today_date = Date()
+        today_date.set_date(today.year, today.month, today.day)
+        return today_date
+    
     def in_future(self):
         return False
 

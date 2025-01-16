@@ -1,7 +1,7 @@
 
-from utils.aux import get_habit_dictionary_str_keys, get_habit_dictionary, get_frequency_from_str, get_target_from_str, get_period, is_float, get_record_dictionary_str_keys
+from utils.aux import get_habit_dictionary_str_keys, get_habit_dictionary, get_frequency_from_str, get_target_from_str, get_period, is_float, get_record_dictionary_str_keys, normalize_line_of_text
 from exceptions.exceptions import CorruptedHabit, CorruptedRecord
-from utils.data import Habits, FREQUENCY_DICT, Tracker
+from utils.data import Habits, FREQUENCY_DICT, Tracker, Date
 from collections import defaultdict
 
 class Habit:
@@ -90,7 +90,7 @@ class Habit:
                 habit: ""
                 frequency: every X [days|weeks|months|day|week|moth]
                 period: Y days
-                target per time: <amount> <metric>
+                target: <amount> <metric>
                 note: ""
         """
         habit_list = [line.split(':')[-1].strip() for line in habit.strip().split("\n")]
@@ -116,6 +116,38 @@ class Habit:
         )
 
         return habit_obj
+    
+    def set_habit_from_str(self, habit_str: str):
+        """"""
+        values = defaultdict(str)
+        for line in habit_str.splitlines():
+            words = normalize_line_of_text(line)
+            if len(words) > 1:
+                values[words[0]] = ' '.join(words[1:])
+        
+        habit_obj = self
+        frequency_amount, frequency_format = get_frequency_from_str(values['frequency'])
+        target_amount, target_metric = get_target_from_str(values['target'])
+        habit_dict = defaultdict(lambda: None)
+        habit_to_partial_dict = get_habit_dictionary(
+            title=values['title'],
+            freq_amount=frequency_amount,
+            freq_format=frequency_format,
+            target_amount=target_amount,
+            target_metric=target_metric,
+            note=values['note'],
+            period=get_period(values['period'])
+        )
+
+        for key,value in habit_to_partial_dict.items():
+            habit_dict[key] = value 
+
+        habit_obj.set_values_from_dict(
+            habit_dict
+        )
+
+        return habit_obj
+
 
     def __str__(self):
         """Returns a string representation of the Habit object in a human-readable format.
@@ -126,10 +158,10 @@ class Habit:
 
         return f"""
         - Title: {self.title}
-        - Start Date (YYYY-MM-DD): {self.start_date}
-        - Period: {self.period if self.period else "Not provided"}
+        - Start Date (YYYY-MM-DD): {self.start_date if self.start_date != None else Date.get_today()}
+        - Period: {str(self.period)+' days' if self.period else "Not provided"}
         - Frequency: every{' '+str(self.frequency_amount)+' ' if self.frequency_amount > 1 else ' '}{FREQUENCY_DICT[self.frequency_format].split()[-1]}
-        - Target: {str(self.target_amount) + " " + str(self.target_metric) if self.target_metric else "Not provided"}
+        - Target per time: {str(self.target_amount) + " " + str(self.target_metric) if self.target_metric else "Not provided"}
         - Note: {self.note}
         """
     

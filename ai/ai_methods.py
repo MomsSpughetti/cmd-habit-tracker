@@ -41,14 +41,14 @@ def generate_single_habit(goal: str):
                     title: <>, 
                     frequency: <pick one from the following formats: every day, every week, every month, every z days, every z weeks, every z months>, 
                     period:<should represent number of days - must be included - and must be a number>, 
-                    target per time: <in this format: <amount> <metric> - must be included>,
+                    target: <in this format: <amount> <metric> - must be included>,
                     note: <A note to make the user more motivated>
 
                     For example, to make the structure clear, it should be something like this:
                     title: running 1 mile
                     frequency: every 3 days
                     period: 90 days
-                    target per time: 1 miles
+                    target: 1 miles
                     note: See your granpa, his health is bad, so do not be like him, play sports and keep healthy
                     Please just write the habit, not any other text, provide an output as the provided template
                     Suggest only one habit.

@@ -90,14 +90,16 @@ def generate():
     generate_new = 1
     while generate_new:
         goal = get_goal()
-        suggested_habit = generate_single_habit(goal)
+        suggested_habit_str = generate_single_habit(goal)
+        suggested_habit = Habit()
+        suggested_habit.set_habit_from_str(suggested_habit_str)
         print(suggested_habit)
         print()
         print("Do you want to add this habit?")
         answer = input()
         if answer.strip().lower() in ['yes', 'y']:
             try:
-                db.add_habit(Habit.get_habit_from_str(suggested_habit).get_dict_column_value())
+                db.add_habit(suggested_habit.get_dict_column_value())
             except Exception as e:
                 print(e)
                 return

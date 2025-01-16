@@ -13,7 +13,7 @@ def set_test_mode():
     global DATABASE
     DATABASE = "habit_tracker_test.db"
 
-def get_habit_dictionary(title: str, period: int, note: str, freq_format: int, freq_amount, target_metric: str, target_amount: int, id=None, start_date=None) -> dict:
+def get_habit_dictionary(title: str, period: int, note: str, freq_format: int, freq_amount, target_metric: str, target_amount: int, id=None, start_date=Date.get_today()) -> dict:
     """Returns a dictionary where the keys are Enums"""
     return {
         Habits.ID: id,
@@ -282,3 +282,23 @@ def get_yes_no_answer():
 
 def get_str_input():
     return input().strip().lower()
+
+def normalize_line_of_text(text: str):
+    """
+    returns a list of all alnum words
+    example: "**info: Alex 50" returns ["info", "alex", 50]
+    """
+    text = text.strip() + ' '
+    norm_chars = []
+    norm_words = []
+    for c in text:
+        if c.isspace():
+            norm_words.append(''.join(norm_chars))
+            norm_chars.clear()
+            continue
+        if c.isalnum():
+            norm_chars.append(c.lower())
+    
+    return norm_words
+    
+
