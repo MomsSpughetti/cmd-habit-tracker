@@ -12,6 +12,8 @@ if __name__ == "__main__":
     wf.quick_test() # for experimenting purposes
 
     # the main program
+    wf.automatic_track()
+    
     while True:
         wf.execute_command(wf.get_command())
 

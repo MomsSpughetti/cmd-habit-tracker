@@ -144,4 +144,8 @@ def insert_tracking_info_for_a_specific_date(records: list):
     records - list of dicts - each record has a dict
     A single record object holds the tracking info of a specific habit for a specific date
     """
+    if len(records) == 0 or records[0] == None or data.Tracker.DATE.value not in records[0]:
+        return
+    date = records[0][data.Tracker.DATE.value]
+    execute_query(queries.delete_all_tracking_info_by_date(), {data.Tracker.DATE.value: date})
     executemany_query(queries.add_track_query(), records)

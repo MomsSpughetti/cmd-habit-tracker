@@ -120,4 +120,9 @@ def add_track_query():
     VALUES (:{db.Tracker.HABIT_ID}, :{db.Tracker.DATE}, :{db.Tracker.ACHIEVED}, :{db.Tracker.EXPLANATION})
     """
 
+def delete_all_tracking_info_by_date():
+    return f"""
+    DELETE FROM {db.Tables.TRACKER}
+    WHERE {db.Tracker.DATE}=:{db.Tracker.DATE}
+    """
 ################################### Advanced queries ###################################

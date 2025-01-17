@@ -78,8 +78,10 @@ def help():
         print(command_usage + "\n")
 
 
-def progress(month: int, year: int):
+def progress():
     """Prints the progress of all habits for the specified month"""
+    year = input("year:")
+    month = input("month:")
     pass
 
 def habits():
@@ -129,7 +131,14 @@ def command_not_found():
 
 def automatic_track():
     """Runs upon starting the program - let's user track todays info"""
-    pass
+    date=data.Date.get_yesterday()
+    habits_count = len(db.get_all_habits())
+    if habits_count == 0:
+        print("Add habits to be tracked!\n")
+    elif len(db.get_all_track_info_of_date(date.string_format())) != habits_count :
+        track_date(date)
+    else:
+        print("Well done! Yesterday's tracking info were provided.\n")
 
 
 def track():
@@ -146,7 +155,8 @@ def track():
             track_date(date=date)
         except Exception as e:
             print(e)
-    
+
+
 ################################ Command handlers ################################
 
 def get_command() -> str:
@@ -183,7 +193,7 @@ def execute_command(command: str):
     elif command == data.Commands.HELP.value:
         help()
     elif command == data.Commands.PROGRESS.value:
-        pass
+        progress()
     elif command == data.Commands.UPDATE.value:
         pass
     elif command == data.Commands.EXIT.value:
