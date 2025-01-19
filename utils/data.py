@@ -83,6 +83,9 @@ class Commands(Enum):
     # for tracking
     TRACK = "track" # provide tracking info for a specific date
 
+    # other
+    CLEAR = "clear"
+
     def get_commands():
         """returns a dict(str, str) of all possible commands - command: <usage>"""
         return {
@@ -96,7 +99,8 @@ class Commands(Enum):
             Commands.UPDATE.value: "Not available",
             Commands.TRACK.value: "track - run to insert tracking info for a specific habit",
             Commands.EXIT.value: "exit",
-            Commands.GENERATE.value: "generate - to make the AI suggest you a habit based on your goal"
+            Commands.GENERATE.value: "generate - to make the AI suggest you a habit based on your goal",
+            Commands.CLEAR.value: "clear - clears previous text"
         }
 
 
@@ -241,7 +245,7 @@ To exit this app you should run `exit`.
 To exit this program you should run `exit`.
 There are some limitations of this app, since some features may be under development.
 This tool is designed and suitable for people that want to achieve their goals.
-Clearing the previous text is not supported yet!
+To clear the previous text run `clear`
 """
 
 ########################################## Functions ##########################################

@@ -168,7 +168,7 @@ def get_target_from_str(target: str):
     """
     target_parts = target.strip().split()
     if len(target_parts) != 2 or not is_float(target_parts[0]):
-        return CorruptedInput(target)
+        raise CorruptedInput(target)
     return (float(target_parts[0]), target_parts[1])
 
 def get_period_from_str(period: str):
@@ -257,13 +257,14 @@ def to_sql_date_foramt(year, month, day) -> str:
     return year+'-'+month_formated+'-'+day_formated
 
 
-def show_tracking_info(info, date):
-    # show the info (if exists)
-    print(f"\nTracking info from {date}:")
-    if len(info) > 0:
-        print(DataFrame(info))
-    else:
-        print("There is no tracking info for this date!\n")
+# def show_tracking_info(info, date):
+#     # show the info (if exists)
+#     print(f"\nTracking info from {date}:")
+#     if len(info) > 0:
+#         for rec in info:
+#             print(rec)
+#     else:
+#         print("There is no tracking info for this date!\n")
 
 def get_choice(options: List[str]):
     options_dict = {}

@@ -1,13 +1,13 @@
 import db.db_operations as db
 import c_logging.logger as log
-from utils.aux import get_new_habit, set_test_mode, get_goal, get_question, get_date, to_sql_date_foramt, show_tracking_info, get_choice
+from utils.aux import get_new_habit, set_test_mode, get_goal, get_question, get_date, get_choice
 from helper_functions import track_date
 from db.models import Habit
 import utils.data as data
 import exceptions.exceptions as exceptions
 from pandas import DataFrame
 from ai.ai_methods import generate_single_habit, answer_question_for_app_use
-
+import os
 
 def quick_test():
     # add()
@@ -156,6 +156,8 @@ def track():
         except Exception as e:
             print(e)
 
+def clear():
+    os.system("clear")
 
 ################################ Command handlers ################################
 
@@ -172,7 +174,7 @@ def get_command() -> str:
             command = input("\n>>> ")
         main_command = command.split()[0]
 
-    return command
+    return main_command
 
 def execute_command(command: str):
     """
@@ -202,5 +204,7 @@ def execute_command(command: str):
         generate()
     elif command == data.Commands.DOCS.value:
         docs()
+    elif command == data.Commands.CLEAR.value:
+        clear()
     else:
         return

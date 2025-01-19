@@ -3,6 +3,8 @@ import utils.aux as aux_funcs
 from db.models import Habit, Record
 import utils.data as data
 import db.db_operations as db
+from pandas import DataFrame
+from tabulate import tabulate
 
 def get_tracking_info_for_unmeasurable_habit(habit: Habit, date: str):
     """Returns an object of class Record"""
@@ -61,14 +63,31 @@ def get_habits_for_date(date: data.Date):
     """
     return db.get_all_habits()
 
+def get_habit_by_id(habit_id: int, habits: List[Habit]) -> Habit:
+    for habit in habits:
+        if habit.id == habit_id:
+            return habit
+    return Habit()
+
+def show_tracking_info(date: data.Date):
+    records_of_date = db.get_all_track_info_of_date(date.string_format())
+    if len(records_of_date) == 0:
+        return
+    habits = db.get_all_habits()
+    table = {'Habit':[], 'Target': [], 'Achieved':[]} # columns are keys
+    for rec in records_of_date:
+        habit = get_habit_by_id(rec.habit_id, habits)
+        table['Habit'].append(habit.title)
+        table['Target'].append(' '.join([str(habit.target_amount), habit.target_metric]))
+        table['Achieved'].append(rec.achieved)
+    print(tabulate(DataFrame(table), headers = 'keys', tablefmt = 'psql') )       
 
 def track_date(date: data.Date):
     """Wrapper function that lets the user insert tracking information for a specific date"""
     # get date
 
-    # get all tracking info from that date then show it
-    records_of_date = db.get_all_track_info_of_date(date.string_format())
-    aux_funcs.show_tracking_info(records_of_date, date.string_format())
+    # show all tracking info from that date then show it
+    show_tracking_info(date)
 
     # let the user choose
     print("\nPlease choose an option:")
