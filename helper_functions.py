@@ -5,6 +5,7 @@ import utils.data as data
 import db.db_operations as db
 from pandas import DataFrame
 from tabulate import tabulate
+import itertools as its
 
 def get_tracking_info_for_unmeasurable_habit(habit: Habit, date: str):
     """Returns an object of class Record"""
@@ -80,7 +81,7 @@ def show_tracking_info(date: data.Date):
         table['Habit'].append(habit.title)
         table['Target'].append(' '.join([str(habit.target_amount), habit.target_metric]))
         table['Achieved'].append(rec.achieved)
-    print(tabulate(DataFrame(table), headers = 'keys', tablefmt = 'psql') )       
+    print(tabulate(DataFrame(table), headers = 'keys', tablefmt = 'psql') )
 
 def track_date(date: data.Date):
     """Wrapper function that lets the user insert tracking information for a specific date"""
@@ -103,3 +104,31 @@ def track_date(date: data.Date):
         #   track only the habits that were not tracked at this date
         #   track a specific habit
         print("Not supported yet!")
+
+def get_table_dict_of_records(records: List[Record]):
+    habits = db.get_all_habits()
+    habits.sort(key=lambda h: h.id)
+
+    table = {
+        'Habit' : [h.title for h in habits]
+    }
+    
+
+    for day in range(1, 30):
+        table[str(day)] = []
+    
+    for date, recs in its.groupby(records, key=lambda r: r.date):
+        day = date.split('-')[2]
+        recs = list(recs)
+        recs.sort(key=lambda r: r.habit_id)
+        for rec in recs:
+            table[day].append(rec.achieved)
+    for column_name, values in table.items():
+        if len(values) < len(habits):
+            table[column_name] = [0]*len(habits)
+    return table
+    
+    
+        
+
+    

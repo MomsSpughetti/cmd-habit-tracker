@@ -130,5 +130,6 @@ def delete_all_tracking_info_by_date():
 def get_all_tracking_info_of_a_month():    
     return f"""
     SELECT * FROM {db.Tables.TRACKER}
-    WHERE  {db.Tracker.DATE}<=':year-:month-31' and {db.Tracker.DATE}>=':year-:month-01'
+    WHERE  {db.Tracker.DATE}<='2025-01-31' and {db.Tracker.DATE}>='2025-01-01
+    ORDER BY {db.Tracker.DATE}'
     """
