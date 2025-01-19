@@ -129,14 +129,18 @@ def add_habit(habit):
 
 # Basic operations for table 'tracker'
 
+def convert_tracker_query_result_to_objects(results):
+    records = [models.Record() for _ in results]
+    [record.set_record_values(res) for record, res in zip(records, results)]
+    return records
+
 def get_all_track_info_of_date(date: str):
     """params: date (YYYY-MM-DD)
     returns a list of tuples of the form (id, habit_id, date, achieved, explanation)"""
     query_params = {data.Tracker.DATE.value : date}
     results = execute_query(queries.get_track_info_of_date_query(), query_params)
-    records = [models.Record() for _ in results]
-    [record.set_record_values(res) for record, res in zip(records, results)]
-    return records
+    return convert_tracker_query_result_to_objects(results)
+
 
 
 def insert_tracking_info_for_a_specific_date(records: list):
@@ -144,4 +148,16 @@ def insert_tracking_info_for_a_specific_date(records: list):
     records - list of dicts - each record has a dict
     A single record object holds the tracking info of a specific habit for a specific date
     """
+    if len(records) == 0 or records[0] == None or data.Tracker.DATE.value not in records[0]:
+        return
+    date = records[0][data.Tracker.DATE.value]
+    execute_query(queries.delete_all_tracking_info_by_date(), {data.Tracker.DATE.value: date})
     executemany_query(queries.add_track_query(), records)
+
+def get_tracked_info_by_month(year, month):
+    """
+    if not working try:
+    - executemany_query() for each day on that specific month
+    """
+    results = execute_query(queries.get_all_tracking_info_of_a_month(), {'year':year, 'month':month})
+    return convert_tracker_query_result_to_objects(results)

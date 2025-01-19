@@ -80,7 +80,9 @@ def help():
 
 def progress(month: int, year: int):
     """Prints the progress of all habits for the specified month"""
-    pass
+    year = input("year:")
+    month = input("month:")
+    print(DataFrame(db.get_tracked_info_by_month(year=year, month=month)))
 
 def habits():
     [print(habit) for habit in db.get_all_habits()]

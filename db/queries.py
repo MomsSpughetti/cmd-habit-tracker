@@ -120,4 +120,16 @@ def add_track_query():
     VALUES (:{db.Tracker.HABIT_ID}, :{db.Tracker.DATE}, :{db.Tracker.ACHIEVED}, :{db.Tracker.EXPLANATION})
     """
 
+def delete_all_tracking_info_by_date():
+    return f"""
+    DELETE FROM {db.Tables.TRACKER}
+    WHERE {db.Tracker.DATE}=:{db.Tracker.DATE}
+    """
+
 ################################### Advanced queries ###################################
+
+def get_all_tracking_info_of_a_month():    
+    return f"""
+    SELECT * FROM {db.Tables.TRACKER}
+    WHERE  {db.Tracker.DATE}<=':year-:month-31' and {db.Tracker.DATE}>=':year-:month-01'
+    """
