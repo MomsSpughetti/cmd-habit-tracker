@@ -152,7 +152,17 @@ class Habit:
         freq = convert_frequency_to_days(freq_amount=self.frequency_amount, freq_format=self.frequency_format) if self.frequency_amount else 1
         target = self.target_amount if self.target_amount else 1
         return (target * days)/freq
-
+    
+    def get_target_amount(self):
+        if self.target_amount == None:
+            return 1
+        return self.target_amount
+    
+    def get_target_metric(self):
+        if self.target_metric == None:
+            return 'times'
+        return self.target_metric
+    
     def __str__(self):
         """Returns a string representation of the Habit object in a human-readable format.
 

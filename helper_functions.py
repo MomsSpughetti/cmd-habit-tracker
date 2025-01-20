@@ -82,7 +82,7 @@ def show_tracking_info(date: data.Date):
     for rec in records_of_date:
         habit = get_habit_by_id(rec.habit_id, habits)
         table['Habit'].append(habit.title)
-        table['Target'].append(' '.join([str(habit.target_amount), habit.target_metric]))
+        table['Target'].append(' '.join([str(habit.get_target_amount()), habit.get_target_metric()]))
         table['Achieved'].append(rec.achieved)
     print(tabulate(DataFrame(table), headers = 'keys', tablefmt = 'psql') )
 
