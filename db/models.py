@@ -1,5 +1,5 @@
 
-from utils.aux import get_habit_dictionary_str_keys, get_habit_dictionary, get_frequency_from_str, get_target_from_str, get_period, is_float, get_record_dictionary_str_keys, normalize_line_of_text
+from utils.aux import get_habit_dictionary_str_keys, get_habit_dictionary, get_frequency_from_str, get_target_from_str, get_period, is_float, get_record_dictionary_str_keys, normalize_line_of_text, convert_frequency_to_days
 from exceptions.exceptions import CorruptedHabit, CorruptedRecord
 from utils.data import Habits, FREQUENCY_DICT, Tracker, Date
 from collections import defaultdict
@@ -58,7 +58,7 @@ class Habit:
         self.frequency_format = habit_dict[Habits.FREQUENCY_FORMAT]
         self.frequency_amount = habit_dict[Habits.FREQUENCY_AMOUNT]
         self.target_metric = habit_dict[Habits.TARGET_METRIC]
-        self.target_amount = habit_dict[Habits.TARGET_AMOUNT]
+        self.target_amount = float(habit_dict[Habits.TARGET_AMOUNT]) if is_float(habit_dict[Habits.TARGET_AMOUNT]) else None
 
     def set_habit_values(self, habit):
         """
@@ -147,7 +147,11 @@ class Habit:
         )
 
         return habit_obj
-
+    
+    def get_total_target(self, days):
+        freq = convert_frequency_to_days(freq_amount=self.frequency_amount, freq_format=self.frequency_format) if self.frequency_amount else 1
+        target = self.target_amount if self.target_amount else 1
+        return (target * days)/freq
 
     def __str__(self):
         """Returns a string representation of the Habit object in a human-readable format.

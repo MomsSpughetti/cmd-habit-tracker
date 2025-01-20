@@ -51,8 +51,14 @@ class Frequency(Enum):
             return Frequency.EVERY_Z_WEEKS.value
         elif freq_cleared == 'moths':
             return Frequency.EVERY_Z_MONTHS.value
-
-
+    
+    def frequency_to_days(freq_format: int, freq_amount: int):
+        Z = 1
+        if freq_format in [1, 4]:
+            Z = 7
+        elif freq_format in [2, 5]:
+            Z = 30
+        return Z*freq_amount
 
 
 
@@ -189,6 +195,9 @@ class Date():
     
     def is_month_valid(self):
         return self.month >= 1 or self.month <= 12
+    
+    def get_max_day(year: int, month: int):
+        return monthrange(year, month)[1]
     
     def is_day_valid(self):
         if not (self.day < 1 or self.day > 31 or not self.is_month_valid() or not self.is_year_valid()):

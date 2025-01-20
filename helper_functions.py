@@ -6,10 +6,12 @@ import db.db_operations as db
 from pandas import DataFrame
 from tabulate import tabulate
 import itertools as its
+from collections import defaultdict
 
 def get_tracking_info_for_unmeasurable_habit(habit: Habit, date: str):
     """Returns an object of class Record"""
     new_record = Record()
+    print()
     print(f"Habit: {habit.title} - Date: {date}")
     question = f"Have I completed this habit at this date?"
     print(question)
@@ -27,6 +29,7 @@ def get_tracking_info_for_measurable_habit(habit: Habit, date: str):
     """Returns an object of class Record"""
     new_record = Record()
     habit_is_measurable = habit.target_amount != None
+    print()
     print(f"Habit: {habit.title} - Date: {date}")
     question = f"How much have I completed out of {habit.target_amount} {habit.target_metric}?" if habit_is_measurable != None else f"Have I completed this habit at this date?"
     helper_strs = [f"out of {habit.target_amount}", "Yes/No"]
@@ -105,28 +108,71 @@ def track_date(date: data.Date):
         #   track a specific habit
         print("Not supported yet!")
 
-def get_table_dict_of_records(records: List[Record]):
-    habits = db.get_all_habits()
-    habits.sort(key=lambda h: h.id)
 
+
+def make_table_by_range(habits : List[Habit], records : List[Record], min : int = 1, max : int = 31):
     table = {
-        'Habit' : [h.title for h in habits]
+        'Habit' : [h.title for h in habits],
     }
-    
-
-    for day in range(1, 30):
-        table[str(day)] = []
-    
+    for day in range(min, max+1):
+        table[day] = []
+        
     for date, recs in its.groupby(records, key=lambda r: r.date):
         day = date.split('-')[2]
+        if int(day) > max or int(day) < min:
+            continue
         recs = list(recs)
         recs.sort(key=lambda r: r.habit_id)
         for rec in recs:
-            table[day].append(rec.achieved)
+                table[int(day)].append(rec.achieved)
+    
     for column_name, values in table.items():
         if len(values) < len(habits):
-            table[column_name] = [0]*len(habits)
+            table[column_name] = table[column_name] + [0]*(len(habits)-len(values))
+    
+    table['Total'] = []
+    table['Goal'] = []
+    total = defaultdict(int)
+
+    for rec in records:
+        total[rec.habit_id] += rec.achieved
+    
+    for habit in habits:
+        table['Total'].append(total[habit.id])
+        target_metric = habit.target_metric if habit.target_metric else 'times'
+        table['Goal'].append(str(habit.get_total_target(max)) + ' ' + target_metric)
+
     return table
+
+def get_table_dict_of_records(records: List[Record]):
+    """
+    returns two dicts
+    first is from day 1-15
+    second is from day 16-31
+    """
+    habits = db.get_all_habits()
+    habits.sort(key=lambda h: h.id)
+    table = make_table_by_range(habits, records)
+
+    table1 = {}
+    table2 = {}
+
+    for key, val in table.items():
+        if key == 'Habit':
+            table1[key] = val
+            table2[key] = val
+        elif key == 'Total' or key == 'Goal':
+            table2[key] = val
+        elif int(key) < 16:
+            table1[key] = val
+        else:
+            table2[key] = val
+    
+    return table1, table2
+
+
+
+
     
     
         

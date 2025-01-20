@@ -4,3 +4,4 @@ __pycache__/
 history.log
 remember.md
 habit_tracker_test.db
+run.sh

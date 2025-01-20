@@ -83,8 +83,9 @@ def progress():
     year = input("year:")
     month = input("month:")
     print()
-    table_dict = get_table_dict_of_records(db.get_tracked_info_by_month(year=year, month=month))
-    print(tabulate(DataFrame(table_dict), headers = 'keys', tablefmt = 'psql') )
+    table_dict1, table_dict2 = get_table_dict_of_records(db.get_tracked_info_by_month(year=year, month=month))
+    print(tabulate(table_dict1, headers = 'keys', tablefmt = 'rounded_grid' ) )
+    print(tabulate(table_dict2, headers = 'keys', tablefmt = 'rounded_grid' ) )
 
 def habits():
     [print(habit) for habit in db.get_all_habits()]

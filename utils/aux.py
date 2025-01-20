@@ -302,4 +302,9 @@ def normalize_line_of_text(text: str):
     
     return norm_words
     
+def convert_frequency_to_days(freq_amount, freq_format):
+    """
+    For example, "Every Z weeks" -> returns Z*7
+    """
+    return Frequency.frequency_to_days(freq_format, freq_amount)
 
