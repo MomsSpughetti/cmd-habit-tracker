@@ -154,10 +154,14 @@ def insert_tracking_info_for_a_specific_date(records: list):
     execute_query(queries.delete_all_tracking_info_by_date(), {data.Tracker.DATE.value: date})
     executemany_query(queries.add_track_query(), records)
 
-def get_tracked_info_by_month(year, month):
+def get_tracked_info_by_month(year: int, month: int):
     """
     if not working try:
     - executemany_query() for each day on that specific month
     """
-    results = execute_query(queries.get_all_tracking_info_of_a_month(), {'year':year, 'month':month})
+    results = execute_query(queries.get_all_tracking_info_of_a_month(), 
+                            {
+                                'first':data.Date.get_first_date_of_month(year=year, month=month), 
+                                'last':data.Date.get_last_date_of_month(year=year, month=month)
+                            })
     return convert_tracker_query_result_to_objects(results)

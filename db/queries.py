@@ -1,5 +1,5 @@
 import utils.data as db
-
+import utils.data as data
 
 
 ################################### Initialization queries ###################################
@@ -127,9 +127,14 @@ def delete_all_tracking_info_by_date():
     """
 ################################### Advanced queries ###################################
 
-def get_all_tracking_info_of_a_month():    
+def get_all_tracking_info_of_a_month():
+    """
+    params:
+        first - a date of the first day in the month
+        last - ...
+    """
     return f"""
     SELECT * FROM {db.Tables.TRACKER}
-    WHERE  {db.Tracker.DATE}<='2025-01-31' and {db.Tracker.DATE}>='2025-01-01
-    ORDER BY {db.Tracker.DATE}'
+    WHERE  {db.Tracker.DATE}>=:first and {db.Tracker.DATE}<=:last
+    ORDER BY {db.Tracker.DATE}
     """

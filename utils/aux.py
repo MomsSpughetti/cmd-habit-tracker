@@ -308,3 +308,17 @@ def convert_frequency_to_days(freq_amount, freq_format):
     """
     return Frequency.frequency_to_days(freq_format, freq_amount)
 
+def get_year():
+    year = input("year: ")
+    while not year.strip().isdigit() or not Date(year=int(year)).is_year_valid():
+        year = input("Please insert a valid year: ")
+    return int(year)
+
+def get_month():
+    month = input("month: ")
+    while not month.strip().isdigit() or not Date(month=int(month)).is_month_valid():
+        month = input("Please insert a valid month: ")
+    return int(month)
+
+def get_year_and_month():
+    return get_year(), get_month()

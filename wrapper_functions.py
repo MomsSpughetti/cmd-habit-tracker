@@ -1,6 +1,6 @@
 import db.db_operations as db
 import c_logging.logger as log
-from utils.aux import get_new_habit, set_test_mode, get_goal, get_question, get_date, get_choice
+from utils.aux import get_new_habit, set_test_mode, get_goal, get_question, get_date, get_choice, get_year_and_month
 from helper_functions import track_date, get_table_dict_of_records, tabulate
 from db.models import Habit
 import utils.data as data
@@ -80,8 +80,7 @@ def help():
 
 def progress():
     """Prints the progress of all habits for the specified month"""
-    year = input("year:")
-    month = input("month:")
+    year, month = get_year_and_month()
     print()
     table_dict1, table_dict2 = get_table_dict_of_records(db.get_tracked_info_by_month(year=year, month=month))
     print(tabulate(table_dict1, headers = 'keys', tablefmt = 'rounded_grid' ) )

@@ -169,14 +169,16 @@ NO_ANSWERS = ["n", "nah", "no", "noo", "nooo", "nooo", "o", "nno"]
 
 
 class Date():
-    def __init__(self):
-        self.year = None
-        self.month = None
-        self.day = None
+    def __init__(self, year: int = None, month: int = None, day: int = None):
+        self.year = int(year) if type(year) is int else 1
+        self.month = int(month) if type(month) is int else 1
+        self.day = int(day) if type(day) is int else 1
+
     def set_date(self, year: int, month: int, day: int):
         self.year = year
         self.month = month
         self.day = day
+
     def get_year_in_Y_format(year: int):
         year_str = str(year)
         zeros_to_be_added = 4 - len(year_str)
@@ -191,7 +193,7 @@ class Date():
         return str(day) if day >= 10 else '0'+str(day)
     
     def is_year_valid(self):
-        return self.year <= date.year or self.year >= 1
+        return self.year <= date.today().year or self.year >= 1
     
     def is_month_valid(self):
         return self.month >= 1 or self.month <= 12
@@ -236,6 +238,16 @@ class Date():
     def in_future(self):
         return False
 
+    def get_first_date_of_month(year: int, month: int):
+        date = Date()
+        date.set_date(year=year, month=month, day=1)
+        return date.string_format()
+    
+    def get_last_date_of_month(year: int, month: int):
+        date = Date()
+        date.set_date(year=year, month=month, day=Date.get_max_day(year, month))
+        return date.string_format()
+          
 DOCUMENTATION = """
 You can ask about the tool, commands, features, troubleshooting, or limitations.
 This tool is a Command-line habit tracker.
