@@ -1,0 +1,5 @@
+      datetime
+      faker
+      pandas
+      tabulate
+      transformers
