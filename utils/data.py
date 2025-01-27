@@ -96,8 +96,8 @@ class Commands(Enum):
         """returns a dict(str, str) of all possible commands - command: <usage>"""
         return {
             Commands.ADD.value: "add - to add a new habit",
+            Commands.DELETE.value: "delete - to delete a habit",
             # Commands.ARCHIVE.value: "Not available",
-            # Commands.DELETE.value: "Not available",
             Commands.HABITS.value: "habits - see all your habits",
             Commands.HELP.value: "help - See possible commands",
             Commands.DOCS.value: "docs - ask the program what you need to do",

@@ -322,3 +322,4 @@ def get_month():
 
 def get_year_and_month():
     return get_year(), get_month()
+

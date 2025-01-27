@@ -12,6 +12,7 @@ if __name__ == "__main__":
     wf.quick_test() # for experimenting purposes
 
     # the main program
+    wf.refresh()
     wf.automatic_track()
     
     while True:

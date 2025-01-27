@@ -165,3 +165,9 @@ def get_tracked_info_by_month(year: int, month: int):
                                 'last':data.Date.get_last_date_of_month(year=year, month=month)
                             })
     return convert_tracker_query_result_to_objects(results)
+
+def delete_habit(habit_id):
+    execute_query(queries.delete_habit_query(), {data.Habits.ID.value: habit_id})
+
+def refresh_tracker_table():
+    execute_query(queries.refresh_tracking_table_query())

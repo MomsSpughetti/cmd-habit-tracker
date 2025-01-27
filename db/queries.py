@@ -103,7 +103,11 @@ def get_habits_by_title():
     SELECT * FROM {db.Tables.HABITS}
     WHERE {db.Habits.TITLE}=:{db.Habits.TITLE}
     """
-
+def delete_habit_query():
+    return f"""
+    DELETE FROM {db.Tables.HABITS}
+    WHERE {db.Habits.ID}=:{db.Habits.ID}
+    """
 
 ################################### Tracking queries ###################################
 
@@ -125,6 +129,13 @@ def delete_all_tracking_info_by_date():
     DELETE FROM {db.Tables.TRACKER}
     WHERE {db.Tracker.DATE}=:{db.Tracker.DATE}
     """
+
+def refresh_tracking_table_query():
+    return f"""
+    DELETE FROM {db.Tables.TRACKER}
+    WHERE {db.Tracker.HABIT_ID} NOT IN (SELECT {db.Habits.ID} FROM {db.Tables.HABITS})
+    """
+
 ################################### Advanced queries ###################################
 
 def get_all_tracking_info_of_a_month():

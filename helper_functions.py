@@ -144,7 +144,7 @@ def make_table_by_range(habits : List[Habit], records : List[Record], min : int 
 
     return table
 
-def get_table_dict_of_records(records: List[Record]):
+def get_table_dict_of_records(records: List[Record], year, month):
     """
     returns two dicts
     first is from day 1-15
@@ -152,7 +152,8 @@ def get_table_dict_of_records(records: List[Record]):
     """
     habits = db.get_all_habits()
     habits.sort(key=lambda h: h.id)
-    table = make_table_by_range(habits, records)
+    max_day = data.Date.get_max_day(year=year, month=month)
+    table = make_table_by_range(habits, records, max=max_day)
 
     table1 = {}
     table2 = {}

@@ -40,6 +40,9 @@ def reset():
 def clear_storage():
     db.drop_db()
 
+def refresh():
+    db.refresh_tracker_table()
+
 def initialize():
     try:
         initialize_logger()
@@ -82,7 +85,7 @@ def progress():
     """Prints the progress of all habits for the specified month"""
     year, month = get_year_and_month()
     print()
-    table_dict1, table_dict2 = get_table_dict_of_records(db.get_tracked_info_by_month(year=year, month=month))
+    table_dict1, table_dict2 = get_table_dict_of_records(records=db.get_tracked_info_by_month(year=year, month=month), year=year, month=month)
     print(tabulate(table_dict1, headers = 'keys', tablefmt = 'rounded_grid' ) )
     print(tabulate(table_dict2, headers = 'keys', tablefmt = 'rounded_grid' ) )
 
@@ -116,6 +119,18 @@ def generate():
                 generate_new = 1
             else:
                 generate_new = 0
+
+def delete():
+    """Deletes a habit"""
+    available_habits = db.get_all_habits()
+    print("Kindly choose the habit you want to delete:")
+    options = [habit.title for habit in available_habits]+["Cancel"]
+    choice = get_choice(options)
+    if choice == len(options):
+        print("No habits were deleted.")
+        return
+    db.delete_habit(available_habits[choice-1].id)
+    print("Habit deleted successfully!")
 
 def docs():
     question  = get_question()
@@ -191,7 +206,7 @@ def execute_command(command: str):
     elif command == data.Commands.ARCHIVE.value:
         pass
     elif command == data.Commands.DELETE.value:
-        pass
+        delete()
     elif command == data.Commands.HABITS.value:
         habits()
     elif command == data.Commands.HELP.value:
