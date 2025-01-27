@@ -37,22 +37,19 @@ def generate_single_habit(goal: str):
         "inputs": f"""
                     My goal: {goal}
                     Suggest me a habit to achieve the previous goal.
-                    Write the habit with the following format: 
+                    Write the habit with the following format, you must generate the habit with exact same format: 
                     title: <>, 
                     frequency: <pick one from the following formats: every day, every week, every month, every z days, every z weeks, every z months>, 
                     period:<should represent number of days - must be included - and must be a number>, 
-                    target: <in this format: <amount> <metric> - must be included>,
-                    note: <A note to make the user more motivated>
+                    target: <in this format: <amount - must be a single word> <metric - must be a single word>>,
+                    note: <A short note to make the user more motivated>
 
-                    For example, to make the structure clear, it should be something like this:
-                    title: running 1 mile
-                    frequency: every 3 days
-                    period: 90 days
-                    target: 1 miles
-                    note: See your granpa, his health is bad, so do not be like him, play sports and keep healthy
-                    Please just write the habit, not any other text, provide an output as the provided template
-                    Suggest only one habit.
-                    Neglect this line: {randint(0, 999)}
+                    An example of a well-formated habit (you should suggest the habit with the exact same format):
+                    title: Exercise
+                    frequency: every day
+                    period: 30 days
+                    target: 60 minutes
+                    note: Prioritize your physical and mental well-being.
                     """
     }
 
