@@ -1,10 +1,8 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer
 import requests
-from utils.data import DOCUMENTATION
+from cmd_habit_tracker.utils.data import DOCUMENTATION
 # import os module
 import os
-from db.db_operations import add_habit
-from db.models import Habit
+from cmd_habit_tracker.db.db_operations import add_habit
 from random import randint
 
 # access environment variable

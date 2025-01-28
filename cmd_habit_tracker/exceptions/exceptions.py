@@ -1,4 +1,4 @@
-from utils.data import Errors, ERROR_MESSAGES
+from cmd_habit_tracker.utils.data import Errors, ERROR_MESSAGES
 
 class DuplicateHabit(Exception):
     def __init__(self):

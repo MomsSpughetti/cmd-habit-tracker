@@ -1,8 +1,8 @@
 from typing import List
-import utils.aux as aux_funcs
-from db.models import Habit, Record
-import utils.data as data
-import db.db_operations as db
+import cmd_habit_tracker.utils.aux as aux_funcs
+from cmd_habit_tracker.db.models import Habit, Record
+import cmd_habit_tracker.utils.data as data
+import cmd_habit_tracker.db.db_operations as db
 from pandas import DataFrame
 from tabulate import tabulate
 import itertools as its

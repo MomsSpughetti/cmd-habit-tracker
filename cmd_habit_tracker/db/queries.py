@@ -1,6 +1,4 @@
-import utils.data as db
-import utils.data as data
-
+import cmd_habit_tracker.utils.data as db
 
 ################################### Initialization queries ###################################
 

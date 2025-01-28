@@ -1,5 +1,4 @@
       datetime
-      faker
       pandas
       tabulate
-      transformers
+      requests

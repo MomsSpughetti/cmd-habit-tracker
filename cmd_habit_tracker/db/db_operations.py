@@ -1,13 +1,11 @@
 
-import pandas as pd
 import sqlite3
-from faker import Faker
-import utils.data as data
+import cmd_habit_tracker.utils.data as data
 import os
-import db.queries as queries
-import c_logging.logger as log
-import exceptions.exceptions as exceptions
-import db.models as models
+import cmd_habit_tracker.db.queries as queries
+import cmd_habit_tracker.c_logging.logger as log
+import cmd_habit_tracker.exceptions.exceptions as exceptions
+import cmd_habit_tracker.db.models as models
 
 
 def execute_query(query, params=''):

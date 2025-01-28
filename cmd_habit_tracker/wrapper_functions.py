@@ -1,12 +1,11 @@
-import db.db_operations as db
-import c_logging.logger as log
-from utils.aux import get_new_habit, set_test_mode, get_goal, get_question, get_date, get_choice, get_year_and_month
-from helper_functions import track_date, get_table_dict_of_records, tabulate
-from db.models import Habit
-import utils.data as data
-import exceptions.exceptions as exceptions
-from pandas import DataFrame
-from ai.ai_methods import generate_single_habit, answer_question_for_app_use
+import cmd_habit_tracker.db.db_operations as db
+import cmd_habit_tracker.c_logging.logger as log
+from cmd_habit_tracker.utils.aux import get_new_habit, set_test_mode, get_goal, get_question, get_date, get_choice, get_year_and_month
+from cmd_habit_tracker.helper_functions import track_date, get_table_dict_of_records, tabulate
+from cmd_habit_tracker.db.models import Habit
+import cmd_habit_tracker.utils.data as data
+import cmd_habit_tracker.exceptions.exceptions as exceptions
+from cmd_habit_tracker.ai.ai_methods import generate_single_habit, answer_question_for_app_use
 import os
 
 def quick_test():
@@ -45,6 +44,9 @@ def refresh():
 
 def initialize():
     try:
+        # the following two lines are important in case the program was executed from a directory other than the one of the project
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        os.chdir(dir_path)
         initialize_logger()
         initialize_db()
     except Exception as e:
@@ -53,6 +55,8 @@ def initialize():
 
 def initialize_for_testing():
     try:
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        os.chdir(dir_path)
         set_test_mode()
         initialize_db()
         clear_storage()

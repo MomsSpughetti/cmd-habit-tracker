@@ -1,26 +1,30 @@
 # Command Line habit tracker
 
-## To try the program:
-- open terminal or command prompt
-- navigate to a desired location
-    - e.g, `cd ~ && mkdir apps && cd apps`
-- clone the repository
-    - `git clone <repo link>`
-- run `pip install -r requirements.txt`
-- run using `python3 main.py`
-- Enjoy!
+# IMPORTANT - Temporarily:
+- Get a token from Hugging face: `<token>`
+    - Navigate to: https://huggingface.co/settings/tokens
+    - Sign up
+    - Verify email
+    - Add token - Choose token type: `read`
+    - Save your token somewhere safe
+- Define an environment variable:
+    - Linux (Bash): `echo 'export HUGGING_FACE_TOKEN="<token>"' >> ~/.bashrc; source ~/.bashrc`
+    - Windows (Command Prompt): `setx HUGGING_FACE_TOKEN "<token>"`
 
+# Downloading:
+- open command line (Prompt on windows / Terminal on Linux)
+- run `pip install cmd-habit-tracker`
 
-### Setup process (Not supported yet):
-- clone the repository
-- Navigate to the cloned repository using command line
-- run make
+# Running the app
+- open command line (Prompt on windows / Terminal on Linux)
+- run `habits`
 
-### Running the program (Not supported yet):
-- open terminal
-- run habits
-- enjoy
+# DOCUMENTATION
+- You can ask the app itself how to use it
+- Start the app by running `habits`
+- Run the command `docs`
+- Ask a question
 
+# HELP
+- To see all possible commands run `help` after starting the program
 
-### Configure the program to run upon turning on your pc:
-- How?

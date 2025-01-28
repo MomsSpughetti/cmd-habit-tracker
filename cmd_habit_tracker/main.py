@@ -1,7 +1,6 @@
-import wrapper_functions as wf
+import cmd_habit_tracker.wrapper_functions as wf
 
-if __name__ == "__main__":
-
+def main():
     # initialize stuff
     wf.initialize()
     #wf.reset()
@@ -18,6 +17,7 @@ if __name__ == "__main__":
     while True:
         wf.execute_command(wf.get_command())
 
-
+if __name__ == "__main__":
+    main()
 
 

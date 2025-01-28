@@ -1,7 +1,7 @@
 
-from utils.aux import get_habit_dictionary_str_keys, get_habit_dictionary, get_frequency_from_str, get_target_from_str, get_period, is_float, get_record_dictionary_str_keys, normalize_line_of_text, convert_frequency_to_days
-from exceptions.exceptions import CorruptedHabit, CorruptedRecord
-from utils.data import Habits, FREQUENCY_DICT, Tracker, Date
+from cmd_habit_tracker.utils.aux import get_habit_dictionary_str_keys, get_habit_dictionary, get_frequency_from_str, get_target_from_str, get_period, is_float, get_record_dictionary_str_keys, normalize_line_of_text, convert_frequency_to_days
+from cmd_habit_tracker.exceptions.exceptions import CorruptedHabit, CorruptedRecord
+from cmd_habit_tracker.utils.data import Habits, FREQUENCY_DICT, Tracker, Date
 from collections import defaultdict
 
 class Habit:

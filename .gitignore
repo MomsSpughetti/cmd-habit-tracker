@@ -6,3 +6,7 @@ remember.md
 habit_tracker_test.db
 run.sh
 venv
+build
+cmd_habit_tracker.egg-info
+dist
+setup.py
