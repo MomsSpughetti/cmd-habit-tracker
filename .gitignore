@@ -10,3 +10,6 @@ build
 cmd_habit_tracker.egg-info
 dist
 setup.py
+data
+pyproject.toml
+update.sh

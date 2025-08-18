@@ -1,11 +1,12 @@
 
 import sqlite3
-import cmd_habit_tracker.utils.data as data
 import os
-import cmd_habit_tracker.db.queries as queries
-import cmd_habit_tracker.c_logging.logger as log
-import cmd_habit_tracker.exceptions.exceptions as exceptions
-import cmd_habit_tracker.db.models as models
+
+from cmd_habit_tracker.utils import data as data
+from cmd_habit_tracker.db import queries as queries
+from cmd_habit_tracker.clogging import config as log
+from cmd_habit_tracker.exceptions import errors as errors
+from cmd_habit_tracker.db import models as models
 
 
 def execute_query(query, params=''):
@@ -94,7 +95,7 @@ def get_habit_by_title(habit_title: str) -> models.Habit:
     """
     results = execute_query(queries.get_habit_by_title_query(), {f'{data.Habits.TITLE.value}': habit_title})
     if len(results) == 0:
-        raise exceptions.HabitNotFound(habit_title=habit_title)
+        raise errors.HabitNotFound(habit_title=habit_title)
     
     habit = models.Habit()
     habit.set_habit_values(results[0])
@@ -119,7 +120,7 @@ def add_habit(habit):
     """
     # check if habit of the same title existd
     if(len(execute_query(queries.get_habits_by_title(), (habit))) > 0):
-        raise exceptions.DuplicateHabit()
+        raise errors.DuplicateHabit()
 
     execute_query(queries.add_habit_query(), habit)
 

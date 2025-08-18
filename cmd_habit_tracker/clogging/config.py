@@ -1,10 +1,10 @@
 # importing module
 import logging
-
+from cmd_habit_tracker.utils import data
 
 def start_logger():
     # Create and configure logger
-    logging.basicConfig(filename="history.log",
+    logging.basicConfig(filename=data.LOGFILE,
                         format='%(asctime)s %(message)s',
                         filemode='w')
 

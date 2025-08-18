@@ -3,10 +3,12 @@ from datetime import date
 from calendar import monthrange
 from datetime import timedelta
 
+import os
+from platformdirs import user_data_dir, user_log_dir
 ########################################## Data ##########################################
 
 TEST_MODE = 0
-DATABASE = "habit_tracker.db"
+APP_NAME = "cmd_habit_tracker"
 
 class Errors(Enum):
     DUPLICATE_HABIT = 0
@@ -85,6 +87,7 @@ class Commands(Enum):
     UPDATE = "update"
     GENERATE = "generate"
     DOCS = "docs"
+    INFO = "info"
 
     # for tracking
     TRACK = "track" # provide tracking info for a specific date
@@ -106,7 +109,8 @@ class Commands(Enum):
             Commands.TRACK.value: "track - run to insert tracking info for a specific habit",
             Commands.EXIT.value: "exit",
             Commands.GENERATE.value: "generate - to make the AI suggest you a habit based on your goal",
-            Commands.CLEAR.value: "clear - clears previous text"
+            Commands.CLEAR.value: "clear - clears previous text",
+            Commands.INFO.value: "info - show general info"
         }
 
 
@@ -141,6 +145,9 @@ class Tracker(Enum):
     def get_number_of_columns():
         return 5
     
+
+class Holder(object):
+    done = False
 
 class Tables(Enum):
     HABITS = "habits"
@@ -270,3 +277,18 @@ To clear the previous text run `clear`
 """
 
 ########################################## Functions ##########################################
+
+def db_location():
+
+    db_dir = user_data_dir(APP_NAME)
+    os.makedirs(db_dir, exist_ok=True)  # Ensure directory exists
+    return os.path.join(db_dir, "habit_tracker.db")
+
+DATABASE = db_location()
+
+def log_location():
+    log_dir = user_log_dir(APP_NAME)
+    os.makedirs(log_dir, exist_ok=True)
+    return os.path.join(log_dir, "habit_tracker.log")
+
+LOGFILE = log_location()

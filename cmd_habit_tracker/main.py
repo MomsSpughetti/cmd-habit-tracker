@@ -1,21 +1,22 @@
-import cmd_habit_tracker.wrapper_functions as wf
+# import cmd_habit_tracker.wrapper_functions as wf
+from cmd_habit_tracker import cli
 
 def main():
     # initialize stuff
-    wf.initialize()
+    cli.initialize()
     #wf.reset()
 
     # print a welcome message
-    wf.welcome()
+    cli.welcome()
 
-    wf.quick_test() # for experimenting purposes
+    cli.quick_test() # for experimenting purposes
 
     # the main program
-    wf.refresh()
-    wf.automatic_track()
+    cli.refresh()
+    cli.automatic_track()
     
     while True:
-        wf.execute_command(wf.get_command())
+        cli.execute_command(cli.get_command())
 
 if __name__ == "__main__":
     main()

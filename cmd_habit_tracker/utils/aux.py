@@ -1,15 +1,17 @@
 import math
 from typing import List
-from cmd_habit_tracker.exceptions.exceptions import CorruptedInput
-from cmd_habit_tracker.utils.data import Habits, FREQUENCY_DICT, Frequency, YES_ANSWERS, Tracker, Date
 from datetime import date
 from calendar import monthrange
+from typing import List
+
+from cmd_habit_tracker.exceptions.errors import CorruptedInput
+from cmd_habit_tracker.utils.data import Habits, FREQUENCY_DICT, Frequency, YES_ANSWERS, Tracker, Date
 
 def set_test_mode():
     global TEST_MODE
     TEST_MODE = 1
     global DATABASE
-    DATABASE = "habit_tracker_test.db"
+    DATABASE = "../../data/habit_tracker_test.db"
 
 def get_habit_dictionary(title: str, period: int, note: str, freq_format: int, freq_amount, target_metric: str, target_amount: int, id=None, start_date=Date.get_today()) -> dict:
     """Returns a dictionary where the keys are Enums"""
@@ -291,6 +293,9 @@ def normalize_line_of_text(text: str):
     norm_chars = []
     norm_words = []
     for c in text:
+        if len(norm_words) == 1 and norm_words[0] == 'note':
+            norm_words.append(text[7:])
+            return norm_words
         if c.isspace():
             norm_words.append(''.join(norm_chars))
             norm_chars.clear()
@@ -321,3 +326,14 @@ def get_month():
 def get_year_and_month():
     return get_year(), get_month()
 
+import itertools
+import time
+import sys
+
+def animate(holder):
+    for c in itertools.cycle(['|', '/', '-', '\\']):
+        if holder.done:
+            break
+        sys.stdout.write('\rThinking ' + c)
+        sys.stdout.flush()
+        time.sleep(0.1)
