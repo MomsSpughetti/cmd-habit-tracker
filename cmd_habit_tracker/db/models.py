@@ -1,5 +1,5 @@
 
-from cmd_habit_tracker.utils.aux import (
+from cmd_habit_tracker.utils._aux import (
     get_habit_dictionary_str_keys,
     get_habit_dictionary,
     get_frequency_from_str,

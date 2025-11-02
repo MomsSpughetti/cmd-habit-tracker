@@ -13,3 +13,7 @@ setup.py
 data
 pyproject.toml
 update.sh
+dev_update.sh
+__init__.py
+.venv
+old

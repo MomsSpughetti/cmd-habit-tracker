@@ -72,7 +72,7 @@ def drop_tables_query():
 
 ################################### Habits queries ###################################
 
-def get_habit_query():
+def get_habit_by_id_query():
     """parameters are: :id"""
     return f"""
     SELECT * FROM {db.Tables.HABITS}
